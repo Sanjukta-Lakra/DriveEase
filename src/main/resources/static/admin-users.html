@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEase | Manage Users</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-layout.css">
+
+    <style>
+        :root {
+            --primary: #14283f;
+            --secondary: #203d59;
+            --gold: #f5b942;
+            --light: #f5f7fa;
+            --text: #263445;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--light);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+        }
+
+        .admin-page-banner {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
+            border-radius: 14px;
+            padding: 25px 30px;
+            margin-bottom: 28px;
+            color: var(--white);
+            box-shadow: 0 5px 16px rgba(20,40,63,.12);
+        }
+
+        .admin-page-banner h2 {
+            font-size: 27px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .admin-page-banner p {
+            font-size: 14px;
+            margin: 0;
+            color: #e2eaf2;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: none;
+            border-radius: 12px;
+            padding: 23px;
+            height: 100%;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 29px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .stat-line {
+            width: 42px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 5px;
+            margin-top: 14px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border: none;
+            border-radius: 13px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .section-description {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--primary);
+            border: none;
+            border-radius: 7px;
+            padding: 9px 17px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .btn-gold:hover {
+            background: #e5a92f;
+            color: var(--primary);
+        }
+
+        .action-btn {
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 42px;
+            border-radius: 7px;
+            font-size: 13px;
+            border-color: #dce2e9;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 .15rem rgba(245,185,66,.2);
+        }
+
+        .search-box {
+            max-width: 340px;
+        }
+
+        .user-table {
+            min-width: 900px;
+            margin-bottom: 0;
+        }
+
+        .user-table thead th {
+            background: var(--primary);
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            padding: 15px 12px;
+        }
+
+        .user-table tbody td {
+            padding: 14px 12px;
+            vertical-align: middle;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .user-table tbody tr:hover {
+            background: #f5f8fc;
+        }
+
+        .table-responsive {
+            border-radius: 8px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            background: #e8edf5;
+            color: var(--primary);
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .active-badge {
+            background: #d1e7dd;
+            color: #146c43;
+        }
+
+        .inactive-badge {
+            background: #f8d7da;
+            color: #b02a37;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 15px;
+            color: #718096;
+        }
+
+        .record-count {
+            color: #718096;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        #trashSection {
+            display: none;
+        }
+
+        @media (max-width: 576px) {
+            .admin-page-banner {
+                min-height: 130px;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .admin-page-banner h2 {
+                font-size: 22px;
+            }
+
+            .admin-page-banner p {
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .stat-card {
+                padding: 17px;
+            }
+
+            .stat-number {
+                font-size: 24px;
+            }
+
+            .main-card {
+                padding: 17px !important;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .btn-gold {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- MOBILE HEADER -->
+
+<header class="mobile-admin-bar">
+    <a href="admin-dashboard.html" class="mobile-admin-brand">DriveEase</a>
+
+    <button class="sidebar-toggle"
+            type="button"
+            onclick="toggleSidebar()"
+            aria-label="Open navigation">
+        ☰
+    </button>
+</header>
+
+<!-- SIDEBAR BACKDROP -->
+
+<div class="sidebar-backdrop"
+     id="sidebarBackdrop"
+     onclick="closeSidebar()"></div>
+
+<!-- ADMIN SIDEBAR -->
+
+<aside class="admin-sidebar" id="adminSidebar">
+
+    <a href="admin-dashboard.html" class="sidebar-brand">
+        DriveEase
+    </a>
+
+    <div class="sidebar-heading">MAIN MENU</div>
+
+    <nav class="sidebar-nav">
+
+        <a href="admin-dashboard.html" class="nav-link">
+            Dashboard
+        </a>
+
+        <a href="admin-vehicles.html" class="nav-link">
+            Manage Vehicles
+        </a>
+
+        <a href="admin-bookings.html" class="nav-link">
+            Manage Bookings
+        </a>
+
+        <a href="admin-users.html" class="nav-link active">
+            Manage Users
+        </a>
+
+        <a href="admin-customers.html" class="nav-link">
+            Manage Customers
+        </a>
+
+        <a href="admin-reviews.html" class="nav-link">
+            Manage Reviews
+        </a>
+
+        <a href="admin-reports.html" class="nav-link">
+            Reports & Analytics
+        </a>
+
+        <a href="admin-payments.html" class="nav-link">
+            Payment Management
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+        <div class="sidebar-admin-label">ADMIN PANEL</div>
+
+        <button class="sidebar-logout" onclick="logout()">
+            Logout
+        </button>
+    </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+
+<main class="admin-content">
+
+    <section class="admin-page-banner">
+        <h2>User Management</h2>
+        <p>Manage registered users, roles and account status.</p>
+    </section>
+
+    <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
+
+        <button class="btn btn-outline-secondary action-btn"
+                onclick="toggleTrash()">
+            View Trash
+        </button>
+
+        <button class="btn btn-gold" onclick="loadUsers()">
+            Refresh Users
+        </button>
+
+    </div>
+
+    <!-- STATISTICS -->
+
+    <section class="row g-3 g-md-4 mb-4">
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Total Users</div>
+                <div class="stat-number" id="totalUsers">0</div>
+                <div class="stat-line"></div>
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Active Users</div>
+                <div class="stat-number text-success" id="activeUsers">0</div>
+                <div class="stat-line"></div>
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Inactive Users</div>
+                <div class="stat-number text-danger" id="inactiveUsers">0</div>
+                <div class="stat-line"></div>
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Administrators</div>
+                <div class="stat-number" id="adminUsers">0</div>
+                <div class="stat-line"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- MAIN USER TABLE -->
+
+    <section class="main-card p-3 p-md-4">
+
+        <div class="d-flex flex-column flex-md-row
+                    justify-content-between align-items-md-center
+                    gap-3 mb-3">
+
+            <div>
+                <h5 class="section-title mb-1">Registered Users</h5>
+                <p class="section-description mb-0">
+                    View and manage registered user accounts.
+                </p>
+            </div>
+
+            <input type="text"
+                   id="searchInput"
+                   class="form-control search-box"
+                   placeholder="Search name, email or phone..."
+                   oninput="renderUsers()">
+
+        </div>
+
+        <div class="row g-3 mb-3">
+
+            <div class="col-12 col-md-4">
+                <select id="roleFilter"
+                        class="form-select"
+                        onchange="renderUsers()">
+                    <option value="ALL">All Roles</option>
+                    <option value="CUSTOMER">Customers</option>
+                    <option value="ADMIN">Administrators</option>
+                </select>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <select id="statusFilter"
+                        class="form-select"
+                        onchange="renderUsers()">
+                    <option value="ALL">All Statuses</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div id="message"></div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle user-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User Details</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Account Status</th>
+                        <th>Registered On</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="userTableBody">
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            Loading users...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="record-count mt-3" id="resultCount"></div>
+
+    </section>
+
+    <!-- USERS TRASH SECTION -->
+
+    <section class="main-card p-3 p-md-4 mt-4" id="trashSection">
+
+        <div class="d-flex flex-column flex-md-row
+                    justify-content-between align-items-md-center
+                    gap-3 mb-3">
+
+            <div>
+                <h5 class="section-title mb-1">Users Trash</h5>
+                <p class="section-description mb-0">
+                    Restore customer accounts or permanently delete eligible accounts.
+                </p>
+            </div>
+
+            <button class="btn btn-outline-secondary action-btn"
+                    onclick="loadTrash()">
+                Refresh Trash
+            </button>
+
+        </div>
+
+        <div id="trashMessage"></div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle user-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User Details</th>
+                        <th>Phone</th>
+                        <th>Account Status</th>
+                        <th>Registered On</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="trashTableBody">
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            Open Trash to load records.
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="record-count mt-3" id="trashCount"></div>
+
+    </section>
+
+</main>
+
+<!-- USER DETAILS MODAL -->
+
+<div class="modal fade" id="userDetailsModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">User Details</h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body" id="userDetailsBody"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="admin-footer">
+    © 2026 DriveEase. All Rights Reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let users = [];
+    let trashUsers = [];
+    let currentAdminEmail = "";
+    let trashOpened = false;
+
+    // SIDEBAR FUNCTIONS
+
+    function toggleSidebar() {
+        document.getElementById("adminSidebar").classList.toggle("open");
+        document.getElementById("sidebarBackdrop").classList.toggle("show");
+    }
+
+    function closeSidebar() {
+        document.getElementById("adminSidebar").classList.remove("open");
+        document.getElementById("sidebarBackdrop").classList.remove("show");
+    }
+
+    // HTML ESCAPING
+
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, function(char) {
+            return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[char];
+        });
+    }
+
+    // API ERROR READER
+
+    async function readResponse(response) {
+        const text = await response.text();
+
+        if (!text) return {};
+
+        try {
+            return JSON.parse(text);
+        } catch {
+            return { message: text };
+        }
+    }
+
+    function getErrorMessage(result, fallback) {
+        return result.message || result.error || fallback;
+    }
+
+    // SHOW MESSAGE
+
+    function showMessage(message, type, elementId = "message") {
+        document.getElementById(elementId).innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show">
+                ${escapeHtml(message)}
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    }
+
+    // AUTHENTICATION CHECK
+
+    async function checkAdmin() {
+        try {
+            const response = await fetch("/api/auth/me", {
+                credentials: "same-origin"
+            });
+
+            if (!response.ok) {
+                window.location.href = "login.html";
+                return false;
+            }
+
+            const user = await response.json();
+
+            if (user.role !== "ADMIN") {
+                window.location.href = "customer-dashboard.html";
+                return false;
+            }
+
+            currentAdminEmail = (user.email || "").toLowerCase();
+            return true;
+
+        } catch (error) {
+            window.location.href = "login.html";
+            return false;
+        }
+    }
+
+    // LOAD USERS
+
+    async function loadUsers() {
+        try {
+            const response = await fetch("/api/admin/customers/all", {
+                credentials: "same-origin"
+            });
+
+            if (response.status === 401 || response.status === 403) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const result = await readResponse(response);
+
+            if (!response.ok) {
+                throw new Error(getErrorMessage(result, "Unable to load users."));
+            }
+
+            users = Array.isArray(result) ? result : [];
+
+            updateStatistics();
+            renderUsers();
+
+            document.getElementById("message").innerHTML = "";
+
+        } catch (error) {
+            showMessage(error.message, "danger");
+
+            document.getElementById("userTableBody").innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-danger py-4">
+                        Unable to load users.
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    // UPDATE STATISTICS
+
+    function updateStatistics() {
+        document.getElementById("totalUsers").textContent = users.length;
+
+        document.getElementById("activeUsers").textContent =
+            users.filter(user => user.active).length;
+
+        document.getElementById("inactiveUsers").textContent =
+            users.filter(user => !user.active).length;
+
+        document.getElementById("adminUsers").textContent =
+            users.filter(user => user.role === "ADMIN").length;
+    }
+
+    // RENDER USERS
+
+    function renderUsers() {
+        const search = document.getElementById("searchInput")
+            .value.toLowerCase().trim();
+
+        const role = document.getElementById("roleFilter").value;
+        const status = document.getElementById("statusFilter").value;
+
+        const filteredUsers = users.filter(user => {
+            const matchesSearch =
+                (user.name || "").toLowerCase().includes(search) ||
+                (user.email || "").toLowerCase().includes(search) ||
+                (user.phone || "").includes(search);
+
+            const matchesRole =
+                role === "ALL" || user.role === role;
+
+            const matchesStatus =
+                status === "ALL" ||
+                (status === "ACTIVE" && user.active) ||
+                (status === "INACTIVE" && !user.active);
+
+            return matchesSearch && matchesRole && matchesStatus;
+        });
+
+        const tbody = document.getElementById("userTableBody");
+
+        if (filteredUsers.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">No users found.</div>
+                    </td>
+                </tr>
+            `;
+
+            document.getElementById("resultCount").textContent =
+                "Showing 0 users";
+            return;
+        }
+
+        tbody.innerHTML = filteredUsers.map(user => {
+            const isCurrentAdmin =
+                (user.email || "").toLowerCase() === currentAdminEmail;
+
+            const statusBadge = user.active
+                ? `<span class="role-badge active-badge">Active</span>`
+                : `<span class="role-badge inactive-badge">Inactive</span>`;
+
+            const roleBadge = `
+                <span class="role-badge">${escapeHtml(user.role)}</span>
+            `;
+
+            let actions = `
+                <button class="btn btn-outline-primary btn-sm action-btn mb-1"
+                        onclick="viewUser(${user.id})">
+                    View
+                </button>
+            `;
+
+            if (!isCurrentAdmin) {
+                actions += `
+                    <div class="dropdown d-inline-block">
+                        <button class="btn btn-outline-secondary btn-sm
+                                       dropdown-toggle action-btn mb-1"
+                                data-bs-toggle="dropdown">
+                            Change Role
+                        </button>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <button class="dropdown-item"
+                                        onclick="changeRole(${user.id}, 'CUSTOMER')">
+                                    Customer
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item"
+                                        onclick="changeRole(${user.id}, 'ADMIN')">
+                                    Admin
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-sm action-btn mb-1
+                            ${user.active ? 'btn-outline-danger' : 'btn-outline-success'}"
+                            onclick="toggleStatus(${user.id}, ${user.active})">
+                        ${user.active ? 'Deactivate' : 'Activate'}
+                    </button>
+                `;
+
+                if (user.role === "CUSTOMER") {
+                    actions += `
+                        <button class="btn btn-outline-danger btn-sm action-btn mb-1"
+                                onclick="moveUserToTrash(${user.id})">
+                            Move to Trash
+                        </button>
+                    `;
+                }
+
+            } else {
+                actions += `
+                    <span class="text-secondary small">Current account</span>
+                `;
+            }
+
+            return `
+                <tr>
+                    <td>${user.id}</td>
+
+                    <td>
+                        <div class="fw-semibold">${escapeHtml(user.name)}</div>
+                        <div class="text-secondary small">
+                            ${escapeHtml(user.email)}
+                        </div>
+                    </td>
+
+                    <td>${escapeHtml(user.phone || "N/A")}</td>
+                    <td>${roleBadge}</td>
+                    <td>${statusBadge}</td>
+                    <td>${formatDate(user.createdAt)}</td>
+                    <td>${actions}</td>
+                </tr>
+            `;
+        }).join("");
+
+        document.getElementById("resultCount").textContent =
+            `Showing ${filteredUsers.length} of ${users.length} users`;
+    }
+
+    // FORMAT DATE
+
+    function formatDate(dateValue) {
+        if (!dateValue) return "N/A";
+
+        const date = new Date(dateValue);
+
+        return isNaN(date.getTime())
+            ? "N/A"
+            : date.toLocaleDateString("en-IN");
+    }
+
+    // VIEW USER DETAILS
+
+    function viewUser(id, fromTrash = false) {
+        const source = fromTrash ? trashUsers : users;
+        const user = source.find(item => item.id === id);
+
+        if (!user) return;
+
+        document.getElementById("userDetailsBody").innerHTML = `
+            <div class="mb-3"><strong>User ID:</strong> ${user.id}</div>
+            <div class="mb-3"><strong>Name:</strong> ${escapeHtml(user.name)}</div>
+            <div class="mb-3"><strong>Email:</strong> ${escapeHtml(user.email)}</div>
+            <div class="mb-3"><strong>Phone:</strong> ${escapeHtml(user.phone || "N/A")}</div>
+            <div class="mb-3"><strong>Driving Licence:</strong>
+                ${escapeHtml(user.drivingLicenseNumber || "N/A")}
+            </div>
+            <div class="mb-3"><strong>Role:</strong> ${escapeHtml(user.role)}</div>
+            <div class="mb-3"><strong>Status:</strong>
+                ${user.active ? "Active" : "Inactive"}
+            </div>
+            <div class="mb-3"><strong>Registration Date:</strong>
+                ${formatDate(user.createdAt)}
+            </div>
+        `;
+
+        bootstrap.Modal.getOrCreateInstance(
+            document.getElementById("userDetailsModal")
+        ).show();
+    }
+
+    // CHANGE USER ROLE
+
+    async function changeRole(id, newRole) {
+        const user = users.find(item => item.id === id);
+        if (!user) return;
+
+        if ((user.email || "").toLowerCase() === currentAdminEmail) {
+            showMessage("You cannot change your own role.", "warning");
+            return;
+        }
+
+        if (user.role === newRole) {
+            showMessage("User already has this role.", "info");
+            return;
+        }
+
+        if (!confirm(
+            `Change ${user.name}'s role from ${user.role} to ${newRole}?`
+        )) return;
+
+        try {
+            const response = await fetch(
+                `/api/admin/customers/${id}/role?role=${newRole}`,
+                {
+                    method: "PUT",
+                    credentials: "same-origin"
+                }
+            );
+
+            const result = await readResponse(response);
+
+            if (!response.ok) {
+                throw new Error(getErrorMessage(result, "Role update failed."));
+            }
+
+            showMessage("User role updated successfully.", "success");
+            await loadUsers();
+
+        } catch (error) {
+            showMessage(error.message, "danger");
+        }
+    }
+
+    // ACTIVATE / DEACTIVATE USER
+
+    async function toggleStatus(id, currentStatus) {
+        const user = users.find(item => item.id === id);
+        if (!user) return;
+
+        if ((user.email || "").toLowerCase() === currentAdminEmail) {
+            showMessage(
+                "You cannot change your own account status.",
+                "warning"
+            );
+            return;
+        }
+
+        const newStatus = !currentStatus;
+        const action = newStatus ? "activate" : "deactivate";
+
+        if (!confirm(
+            `Are you sure you want to ${action} ${user.name}'s account?`
+        )) return;
+
+        try {
+            const response = await fetch(
+                `/api/admin/customers/${id}/status?active=${newStatus}`,
+                {
+                    method: "PUT",
+                    credentials: "same-origin"
+                }
+            );
+
+            const result = await readResponse(response);
+
+            if (!response.ok) {
+                throw new Error(getErrorMessage(result, "Status update failed."));
+            }
+
+            showMessage(`User account ${action}d successfully.`, "success");
+            await loadUsers();
+
+        } catch (error) {
+            showMessage(error.message, "danger");
+        }
+    }
+
+    // MOVE CUSTOMER TO TRASH
+
+    async function moveUserToTrash(id) {
+        const user = users.find(item => item.id === id);
+        if (!user) return;
+
+        if (user.role !== "CUSTOMER") {
+            showMessage("Only customer accounts can be moved to Trash.", "warning");
+            return;
+        }
+
+        if ((user.email || "").toLowerCase() === currentAdminEmail) {
+            showMessage("You cannot move your own account to Trash.", "warning");
+            return;
+        }
+
+        const confirmed = confirm(
+            `Move ${user.name}'s account to Trash? They will not be able to log in until restored.`
+        );
+
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(
+                `/api/admin/customers/${id}/trash`,
+                {
+                    method: "PATCH",
+                    credentials: "same-origin"
+                }
+            );
+
+            const result = await readResponse(response);
+
+            if (!response.ok) {
+                throw new Error(
+                    getErrorMessage(result, "Unable to move customer to Trash.")
+                );
+            }
+
+            showMessage(
+                result.message || "Customer moved to Trash successfully.",
+                "success"
+            );
+
+            await loadUsers();
+
+            if (trashOpened) {
+                await loadTrash();
+            }
+
+        } catch (error) {
+            showMessage(error.message, "danger");
+        }
+    }
+
+    // OPEN / CLOSE TRASH
+
+    async function toggleTrash() {
+        const section = document.getElementById("trashSection");
+
+        trashOpened = !trashOpened;
+        section.style.display = trashOpened ? "block" : "none";
+
+        const button = document.querySelector(
+            'button[onclick="toggleTrash()"]'
+        );
+
+        button.textContent = trashOpened ? "Hide Trash" : "View Trash";
+
+        if (trashOpened) {
+            await loadTrash();
+        }
+    }
+
+    // LOAD TRASH
+
+    async function loadTrash() {
+        try {
+            const response = await fetch(
+                "/api/admin/customers/trash",
+                {
+                    credentials: "same-origin"
+                }
+            );
+
+            if (response.status === 401 || response.status === 403) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const result = await readResponse(response);
+
+            if (!response.ok) {
+                throw new Error(
+                    getErrorMessage(result, "Unable to load Users Trash.")
+                );
+            }
+
+            trashUsers = Array.isArray(result) ? result : [];
+            renderTrash();
+
+            document.getElementById("trashMessage").innerHTML = "";
+
+        } catch (error) {
+            showMessage(error.message, "danger", "trashMessage");
+        }
+    }
+
+    // RENDER TRASH
+
+    function renderTrash() {
+        const tbody = document.getElementById("trashTableBody");
+
+        if (trashUsers.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            No customers in Trash.
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            document.getElementById("trashCount").textContent =
+                "Showing 0 customers";
+            return;
+        }
+
+        tbody.innerHTML = trashUsers.map(user => `
+            <tr>
+                <td>${user.id}</td>
+
+                <td>
+                    <div class="fw-semibold">${escapeHtml(user.name)}</div>
+                    <div class="text-secondary small">
+                        ${escapeHtml(user.email)}
+                    </div>
+                </td>
+
+                <td>${escapeHtml(user.phone || "N/A")}</td>
+
+                <td>
+                    <span class="role-badge
+                        ${user.active ? 'active-badge' : 'inactive-badge'}">
+                        ${user.active ? "Active" : "Inactive"}
+                    </span>
+                </td>
+
+                <td>${formatDate(user.createdAt)}</td>
+
+                <td>
+                    <button class="btn btn-outline-primary btn-sm action-btn mb-1"
+                            onclick="viewUser(${user.id}, true)">
+                        View
+                    </button>
+
+                    <button class="btn btn-outline-success btn-sm action-btn mb-1"
+                            onclick="restoreUser(${user.id})">
+                        Restore
+                    </button>
+
+                    <button class="btn btn-danger btn-sm action-btn mb-1"
+                            onclick="permanentlyDeleteUser(${user.id})">
+                        Delete Forever
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+
+        document.getElementById("trashCount").textContent =
+            `Showing ${trashUsers.length} customers in Trash`;
+    }
+
+    // RESTORE CUSTOMER
+
+    async function restoreUser(id) {
+        const user = trashUsers.find(item => item.id === id);
+        if (!user) return;
+
+        if (!confirm(`Restore ${user.name}'s account?`)) return;
+
+        try {
+            const response = await fetch(
+                `/api/admin/customers/${id}/restore`,
+                {
+                    method: "PATCH",
+                    credentials: "same-origin"
+                }
+            );
+
+            const result = await readResponse(response);
+
+            if (!response.ok) {
+                throw new Error(
+                    getErrorMessage(result, "Unable to restore customer.")
+                );
+            }
+
+            showMessage(
+                result.message || "Customer restored successfully.",
+                "success",
+                "trashMessage"
+            );
+
+            await loadTrash();
+            await loadUsers();
+
+        } catch (error) {
+            showMessage(error.message, "danger", "trashMessage");
+        }
+    }
+
+    // PERMANENTLY DELETE CUSTOMER
+
+    async function permanentlyDeleteUser(id) {
+        const user = trashUsers.find(item => item.id === id);
+        if (!user) return;
+
+        const confirmed = confirm(
+            `Permanently delete ${user.name}'s account?\n\n` +
+            "This action cannot be undone. Customers with booking or review history cannot be permanently deleted."
+        );
+
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(
+                `/api/admin/customers/${id}/permanent`,
+                {
+                    method: "DELETE",
+                    credentials: "same-origin"
+                }
+            );
+
+            const result = await readResponse(response);
+
+            if (!response.ok) {
+                throw new Error(
+                    getErrorMessage(
+                        result,
+                        "Unable to permanently delete customer. Their booking or review history may exist."
+                    )
+                );
+            }
+
+            showMessage(
+                result.message || "Customer permanently deleted.",
+                "success",
+                "trashMessage"
+            );
+
+            await loadTrash();
+            await loadUsers();
+
+        } catch (error) {
+            showMessage(error.message, "danger", "trashMessage");
+        }
+    }
+
+    // LOGOUT
+
+    async function logout() {
+        try {
+            await fetch("/api/auth/logout", {
+                method: "POST",
+                credentials: "same-origin"
+            });
+        } finally {
+            window.location.href = "login.html";
+        }
+    }
+
+    // INITIALIZE PAGE
+
+    document.addEventListener("DOMContentLoaded", async function() {
+        const isAdmin = await checkAdmin();
+
+        if (isAdmin) {
+            await loadUsers();
+        }
+    });
+
+</script>
+
+</body>
+</html>

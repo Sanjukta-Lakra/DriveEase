@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DriveEase | Manage Vehicles</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/admin-layout.css">
+
+<style>
+:root {
+    --primary: #14283f;
+    --secondary: #203d59;
+    --gold: #f5b942;
+    --light: #f5f7fa;
+    --text: #263445;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--light);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* ================= MAIN CONTENT ================= */
+
+.admin-page-banner {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(120deg, var(--primary), var(--secondary));
+    border-radius: 14px;
+    padding: 25px 30px;
+    margin-bottom: 28px;
+    color: var(--white);
+    box-shadow: 0 5px 16px rgba(20,40,63,.12);
+}
+
+.admin-page-banner h2 {
+    font-size: 27px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.admin-page-banner p {
+    font-size: 14px;
+    margin: 0;
+    color: #e2eaf2;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn-gold {
+    background: var(--gold);
+    color: var(--primary);
+    border: none;
+    border-radius: 7px;
+    padding: 9px 17px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.btn-gold:hover {
+    background: #e5a927;
+    color: var(--primary);
+}
+
+/* ================= STATISTICS ================= */
+
+.stat-card,
+.content-card {
+    background: var(--white);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.06);
+}
+
+.stat-number {
+    font-size: 27px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.stat-label {
+    color: #718096;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ================= TABLE ================= */
+
+.vehicle-table {
+    min-width: 1050px;
+    margin-bottom: 0;
+}
+
+.vehicle-table thead th {
+    background: var(--primary);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 14px;
+}
+
+.vehicle-table tbody td {
+    padding: 13px;
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.vehicle-table tbody tr:hover {
+    background: #f5f8fc;
+}
+
+.vehicle-image {
+    width: 65px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #eef2f7;
+    flex-shrink: 0;
+}
+
+/* ================= STATUS ================= */
+
+.status-badge {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.AVAILABLE {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.RENTED {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.MAINTENANCE {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.INACTIVE {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ================= FORMS AND MODAL ================= */
+
+.form-label {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.form-control,
+.form-select {
+    min-height: 42px;
+    padding: 9px 10px;
+    font-size: 13px;
+    border-color: #dce2e9;
+    border-radius: 7px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 .15rem rgba(245,185,66,.2);
+}
+
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+.modal-footer .btn {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ================= RESPONSIVE PAGE CONTENT ================= */
+
+@media (max-width: 576px) {
+    .admin-page-banner {
+        min-height: 130px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .admin-page-banner h2 {
+        font-size: 22px;
+    }
+
+    .admin-page-banner p {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .stat-card {
+        padding: 15px !important;
+    }
+
+    .stat-number {
+        font-size: 24px;
+    }
+
+    .content-card {
+        padding: 17px !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- MOBILE HEADER -->
+
+<header class="mobile-admin-bar">
+    <a href="admin-dashboard.html" class="mobile-admin-brand">
+        DriveEase
+    </a>
+
+    <button class="sidebar-toggle"
+            type="button"
+            onclick="toggleSidebar()"
+            aria-label="Open navigation">
+        ☰
+    </button>
+</header>
+
+<!-- SIDEBAR BACKDROP -->
+
+<div class="sidebar-backdrop"
+     id="sidebarBackdrop"
+     onclick="closeSidebar()">
+</div>
+
+<!-- ADMIN SIDEBAR -->
+
+<aside class="admin-sidebar" id="adminSidebar">
+
+    <a href="admin-dashboard.html" class="sidebar-brand">
+        DriveEase
+    </a>
+
+    <div class="sidebar-heading">MAIN MENU</div>
+
+    <nav class="sidebar-nav">
+
+        <a href="admin-dashboard.html" class="nav-link">
+            Dashboard
+        </a>
+
+        <a href="admin-vehicles.html" class="nav-link active">
+            Manage Vehicles
+        </a>
+
+        <a href="admin-bookings.html" class="nav-link">
+            Manage Bookings
+        </a>
+
+        <a href="admin-users.html" class="nav-link">
+            Manage Users
+        </a>
+
+        <a href="admin-customers.html" class="nav-link">
+            Manage Customers
+        </a>
+
+        <a href="admin-reviews.html" class="nav-link">
+            Manage Reviews
+        </a>
+
+        <a href="admin-reports.html" class="nav-link">
+            Reports & Analytics
+        </a>
+
+        <a href="admin-payments.html" class="nav-link">
+            Payment Management
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-admin-label">
+            ADMIN PANEL
+        </div>
+
+        <button class="sidebar-logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+
+<main class="admin-content">
+
+    <section class="admin-page-banner">
+        <h2>Manage Vehicles</h2>
+        <p>Add, update and manage your rental vehicle inventory.</p>
+    </section>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+            <h5 class="fw-bold mb-1">Vehicle Inventory</h5>
+            <p class="text-secondary mb-0 small">
+                Manage your fleet and vehicle availability.
+            </p>
+        </div>
+
+        <button class="btn btn-gold px-4"
+                onclick="openAddModal()">
+            + Add Vehicle
+        </button>
+
+    </div>
+
+    <div id="message"></div>
+
+    <!-- STATISTICS -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card p-3">
+                <div class="stat-label">Total Vehicles</div>
+                <div class="stat-number" id="totalVehicles">0</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card p-3">
+                <div class="stat-label">Available</div>
+                <div class="stat-number text-success" id="availableVehicles">0</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card p-3">
+                <div class="stat-label">Rented</div>
+                <div class="stat-number text-primary" id="rentedVehicles">0</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card p-3">
+                <div class="stat-label">Maintenance</div>
+                <div class="stat-number text-warning" id="maintenanceVehicles">0</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- VEHICLE INVENTORY -->
+
+    <div class="content-card p-3 p-md-4">
+
+        <div class="row g-3 mb-3">
+
+            <div class="col-12 col-md-5">
+                <input type="text"
+                       id="searchInput"
+                       class="form-control"
+                       placeholder="Search name, brand or registration..."
+                       oninput="applyFilters()">
+            </div>
+
+            <div class="col-6 col-md-3">
+                <select id="categoryFilter"
+                        class="form-select"
+                        onchange="applyFilters()">
+                    <option value="">All Categories</option>
+                    <option value="CAR">Car</option>
+                    <option value="BIKE">Bike</option>
+                    <option value="SUV">SUV</option>
+                    <option value="BUS">Bus</option>
+                    <option value="VAN">Van</option>
+                    <option value="SCOOTY">Scooty</option>
+                </select>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <select id="statusFilter"
+                        class="form-select"
+                        onchange="applyFilters()">
+                    <option value="">All Statuses</option>
+                    <option value="AVAILABLE">Available</option>
+                    <option value="RENTED">Rented</option>
+                    <option value="MAINTENANCE">Maintenance</option>
+                    <option value="INACTIVE">Inactive</option>
+                </select>
+            </div>
+
+            <div class="col-12 col-md-1">
+                <button class="btn btn-outline-secondary w-100"
+                        onclick="resetFilters()">
+                    Reset
+                </button>
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">All Vehicles</h5>
+            <small class="text-secondary" id="vehicleCount">0 vehicles</small>
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle vehicle-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Vehicle</th>
+                        <th>Registration</th>
+                        <th>Category</th>
+                        <th>Price / Day</th>
+                        <th>Seats</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="vehicleTable">
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            Loading vehicles...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div id="emptyMessage"
+             class="text-center text-secondary py-4"
+             style="display:none;">
+            No vehicles found.
+        </div>
+
+    </div>
+
+</main>
+
+<footer class="admin-footer">
+    © 2026 DriveEase. All Rights Reserved.
+</footer>
+
+<!-- ADD / EDIT VEHICLE MODAL -->
+
+<div class="modal fade" id="vehicleModal" tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="modalTitle">
+                    Add Vehicle
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="vehicleForm">
+
+                    <input type="hidden" id="vehicleId">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Vehicle Name *</label>
+                            <input type="text" id="name"
+                                   class="form-control"
+                                   maxlength="100" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Brand *</label>
+                            <input type="text" id="brand"
+                                   class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Model *</label>
+                            <input type="text" id="model"
+                                   class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Registration Number *</label>
+                            <input type="text" id="registrationNumber"
+                                   class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Category *</label>
+                            <select id="category" class="form-select" required>
+                                <option value="">Select Category</option>
+                                <option value="CAR">Car</option>
+                                <option value="BIKE">Bike</option>
+                                <option value="SUV">SUV</option>
+                                <option value="BUS">Bus</option>
+                                <option value="VAN">Van</option>
+                                <option value="SCOOTY">Scooty</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Price Per Day (₹) *</label>
+                            <input type="number" id="pricePerDay"
+                                   class="form-control"
+                                   min="1" step="0.01" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Seating Capacity *</label>
+                            <input type="number" id="seatingCapacity"
+                                   class="form-control"
+                                   min="1" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Fuel Type *</label>
+                            <select id="fuelType" class="form-select" required>
+                                <option value="">Select Fuel</option>
+                                <option value="PETROL">Petrol</option>
+                                <option value="DIESEL">Diesel</option>
+                                <option value="ELECTRIC">Electric</option>
+                                <option value="CNG">CNG</option>
+                                <option value="HYBRID">Hybrid</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Transmission *</label>
+                            <select id="transmission" class="form-select" required>
+                                <option value="">Select Transmission</option>
+                                <option value="MANUAL">Manual</option>
+                                <option value="AUTOMATIC">Automatic</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Status</label>
+                            <select id="status" class="form-select">
+                                <option value="AVAILABLE">Available</option>
+                                <option value="RENTED">Rented</option>
+                                <option value="MAINTENANCE">Maintenance</option>
+                                <option value="INACTIVE">Inactive</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Image URL</label>
+                            <input type="url" id="imageUrl"
+                                   class="form-control"
+                                   placeholder="https://example.com/vehicle.jpg">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Description</label>
+                            <textarea id="description"
+                                      class="form-control"
+                                      rows="3"
+                                      maxlength="1000"></textarea>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button class="btn btn-gold px-4"
+                        id="saveButton"
+                        onclick="saveVehicle()">
+                    Save Vehicle
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const API = "/api";
+
+let vehicles = [];
+
+const vehicleModal = new bootstrap.Modal(
+    document.getElementById("vehicleModal")
+);
+
+/* ================= SIDEBAR ================= */
+
+function toggleSidebar() {
+    document.getElementById("adminSidebar").classList.toggle("open");
+    document.getElementById("sidebarBackdrop").classList.toggle("show");
+}
+
+function closeSidebar() {
+    document.getElementById("adminSidebar").classList.remove("open");
+    document.getElementById("sidebarBackdrop").classList.remove("show");
+}
+
+/* ================= COMMON API REQUEST ================= */
+
+async function apiRequest(url, options = {}) {
+
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            ...(options.headers || {})
+        }
+    });
+
+    if (response.status === 401 || response.status === 403) {
+        throw new Error("Your session has expired or you are not authorized.");
+    }
+
+    const responseText = await response.text();
+
+    if (!response.ok) {
+
+        let errorMessage = responseText || "Request failed.";
+
+        try {
+            const errorData = JSON.parse(responseText);
+            errorMessage =
+                errorData.message ||
+                errorData.error ||
+                errorMessage;
+        } catch (e) {
+            // Keep original response text.
+        }
+
+        throw new Error(errorMessage);
+    }
+
+    if (response.status === 204 || !responseText) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(responseText);
+    } catch (error) {
+        throw new Error("Server returned an invalid response.");
+    }
+}
+
+/* ================= CHECK ADMIN ================= */
+
+async function checkAdmin() {
+
+    try {
+
+        const user = await apiRequest(API + "/auth/me");
+
+        if (!user || user.role !== "ADMIN") {
+            window.location.href = "login.html";
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+
+        window.location.href = "login.html";
+        return false;
+    }
+}
+
+/* ================= LOAD VEHICLES ================= */
+
+async function loadVehicles() {
+
+    const table = document.getElementById("vehicleTable");
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="8" class="text-center py-4">
+                Loading vehicles...
+            </td>
+        </tr>`;
+
+    try {
+
+        const result = await apiRequest(API + "/vehicles");
+
+        if (!Array.isArray(result)) {
+            throw new Error("Vehicle API did not return a vehicle list.");
+        }
+
+        vehicles = result;
+
+        updateStatistics();
+        applyFilters();
+
+    } catch (error) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center text-danger py-4">
+                    ${escapeHtml(error.message)}
+                </td>
+            </tr>`;
+
+        document.getElementById("emptyMessage").style.display = "none";
+    }
+}
+
+/* ================= STATISTICS ================= */
+
+function updateStatistics() {
+
+    document.getElementById("totalVehicles").textContent =
+        vehicles.length;
+
+    document.getElementById("availableVehicles").textContent =
+        vehicles.filter(v => v.status === "AVAILABLE").length;
+
+    document.getElementById("rentedVehicles").textContent =
+        vehicles.filter(v => v.status === "RENTED").length;
+
+    document.getElementById("maintenanceVehicles").textContent =
+        vehicles.filter(v => v.status === "MAINTENANCE").length;
+}
+
+/* ================= FILTERS ================= */
+
+function applyFilters() {
+
+    const search = document.getElementById("searchInput")
+        .value.toLowerCase().trim();
+
+    const category = document.getElementById("categoryFilter").value;
+    const status = document.getElementById("statusFilter").value;
+
+    const filtered = vehicles.filter(v => {
+
+        const matchesSearch =
+            (v.name || "").toLowerCase().includes(search) ||
+            (v.brand || "").toLowerCase().includes(search) ||
+            (v.registrationNumber || "").toLowerCase().includes(search);
+
+        return matchesSearch &&
+            (!category || v.category === category) &&
+            (!status || v.status === status);
+    });
+
+    renderVehicles(filtered);
+}
+
+/* ================= DISPLAY VEHICLES ================= */
+
+function renderVehicles(list) {
+
+    const table = document.getElementById("vehicleTable");
+    const empty = document.getElementById("emptyMessage");
+
+    document.getElementById("vehicleCount").textContent =
+        list.length + " vehicle(s)";
+
+    if (list.length === 0) {
+        table.innerHTML = "";
+        empty.style.display = "block";
+        return;
+    }
+
+    empty.style.display = "none";
+
+    table.innerHTML = list.map(v => {
+
+        const image = v.imageUrl
+            ? `<img class="vehicle-image"
+                    src="${escapeHtml(v.imageUrl)}"
+                    alt="Vehicle"
+                    onerror="this.style.display='none'">`
+            : `<div class="vehicle-image d-flex align-items-center justify-content-center">
+                    Vehicle
+               </div>`;
+
+        return `
+            <tr>
+                <td>${escapeHtml(v.id)}</td>
+
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        ${image}
+                        <div>
+                            <div class="fw-bold">${escapeHtml(v.name)}</div>
+                            <small class="text-secondary">
+                                ${escapeHtml(v.brand)} ${escapeHtml(v.model)}
+                            </small>
+                        </div>
+                    </div>
+                </td>
+
+                <td>${escapeHtml(v.registrationNumber)}</td>
+                <td>${escapeHtml(v.category)}</td>
+
+                <td>
+                    ₹${Number(v.pricePerDay).toLocaleString("en-IN")}
+                </td>
+
+                <td>${escapeHtml(v.seatingCapacity)}</td>
+
+                <td>
+                    <span class="status-badge ${escapeHtml(v.status)}">
+                        ${escapeHtml(v.status)}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-outline-primary"
+                                onclick="editVehicle(${Number(v.id)})">
+                            Edit
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-danger"
+                                onclick="deleteVehicle(${Number(v.id)})">
+                            Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+    }).join("");
+}
+
+/* ================= RESET FILTERS ================= */
+
+function resetFilters() {
+
+    document.getElementById("searchInput").value = "";
+    document.getElementById("categoryFilter").value = "";
+    document.getElementById("statusFilter").value = "";
+
+    applyFilters();
+}
+
+/* ================= ADD VEHICLE ================= */
+
+function openAddModal() {
+
+    document.getElementById("vehicleForm").reset();
+    document.getElementById("vehicleId").value = "";
+    document.getElementById("status").value = "AVAILABLE";
+
+    document.getElementById("modalTitle").textContent = "Add Vehicle";
+    document.getElementById("saveButton").textContent = "Save Vehicle";
+    document.getElementById("saveButton").disabled = false;
+
+    vehicleModal.show();
+}
+
+/* ================= EDIT VEHICLE ================= */
+
+function editVehicle(id) {
+
+    const v = vehicles.find(
+        vehicle => Number(vehicle.id) === Number(id)
+    );
+
+    if (!v) {
+        showMessage("Vehicle not found.", "danger");
+        return;
+    }
+
+    document.getElementById("vehicleId").value = v.id;
+    document.getElementById("name").value = v.name || "";
+    document.getElementById("brand").value = v.brand || "";
+    document.getElementById("model").value = v.model || "";
+
+    document.getElementById("registrationNumber").value =
+        v.registrationNumber || "";
+
+    document.getElementById("category").value = v.category || "";
+    document.getElementById("pricePerDay").value = v.pricePerDay || "";
+    document.getElementById("seatingCapacity").value = v.seatingCapacity || "";
+    document.getElementById("fuelType").value = v.fuelType || "";
+    document.getElementById("transmission").value = v.transmission || "";
+    document.getElementById("status").value = v.status || "AVAILABLE";
+    document.getElementById("imageUrl").value = v.imageUrl || "";
+    document.getElementById("description").value = v.description || "";
+
+    document.getElementById("modalTitle").textContent = "Edit Vehicle";
+    document.getElementById("saveButton").textContent = "Update Vehicle";
+    document.getElementById("saveButton").disabled = false;
+
+    vehicleModal.show();
+}
+
+/* ================= SAVE VEHICLE ================= */
+
+async function saveVehicle() {
+
+    const form = document.getElementById("vehicleForm");
+
+    if (!form.reportValidity()) {
+        return;
+    }
+
+    const id = document.getElementById("vehicleId").value;
+    const isEdit = Boolean(id);
+
+    const vehicle = {
+        name: document.getElementById("name").value.trim(),
+        brand: document.getElementById("brand").value.trim(),
+        model: document.getElementById("model").value.trim(),
+
+        registrationNumber:
+            document.getElementById("registrationNumber").value.trim(),
+
+        category: document.getElementById("category").value,
+
+        pricePerDay:
+            Number(document.getElementById("pricePerDay").value),
+
+        seatingCapacity:
+            Number(document.getElementById("seatingCapacity").value),
+
+        fuelType: document.getElementById("fuelType").value,
+        transmission: document.getElementById("transmission").value,
+        status: document.getElementById("status").value,
+
+        imageUrl: document.getElementById("imageUrl").value.trim(),
+        description: document.getElementById("description").value.trim()
+    };
+
+    const button = document.getElementById("saveButton");
+
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    try {
+
+        await apiRequest(
+            isEdit
+                ? API + "/vehicles/" + id
+                : API + "/vehicles",
+            {
+                method: isEdit ? "PUT" : "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(vehicle)
+            }
+        );
+
+        vehicleModal.hide();
+
+        showMessage(
+            isEdit
+                ? "Vehicle updated successfully."
+                : "Vehicle added successfully.",
+            "success"
+        );
+
+        await loadVehicles();
+
+    } catch (error) {
+
+        showMessage(error.message, "danger");
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = isEdit ? "Update Vehicle" : "Save Vehicle";
+    }
+}
+
+/* ================= DELETE VEHICLE ================= */
+
+async function deleteVehicle(id) {
+
+    if (!confirm("Are you sure you want to delete vehicle #" + id + "?")) {
+        return;
+    }
+
+    try {
+
+        await apiRequest(API + "/vehicles/" + id, {
+            method: "DELETE"
+        });
+
+        showMessage("Vehicle deleted successfully.", "success");
+
+        await loadVehicles();
+
+    } catch (error) {
+
+        showMessage(error.message, "danger");
+    }
+}
+
+/* ================= ALERT MESSAGE ================= */
+
+function showMessage(message, type) {
+
+    const element = document.getElementById("message");
+
+    element.innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show"
+             role="alert">
+            ${escapeHtml(message)}
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>`;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+/* ================= HTML ESCAPE ================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+/* ================= LOGOUT ================= */
+
+async function logout() {
+
+    try {
+
+        await fetch(API + "/auth/logout", {
+            method: "POST",
+            credentials: "same-origin"
+        });
+
+    } finally {
+
+        window.location.href = "login.html";
+    }
+}
+
+/* ================= INITIALIZE ================= */
+
+async function initializePage() {
+
+    const isAdmin = await checkAdmin();
+
+    if (isAdmin) {
+        await loadVehicles();
+    }
+}
+
+initializePage();
+
+</script>
+
+</body>
+</html>

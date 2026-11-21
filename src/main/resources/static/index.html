@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEase | Vehicle Rental</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --primary: #14283f;
+            --secondary: #203d59;
+            --gold: #f5b942;
+            --light: #f5f7fa;
+            --text: #263445;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding-top: 70px;
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            background: var(--white);
+        }
+
+        /* COMMON NAVBAR */
+
+        .driveease-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 70px;
+            background: var(--primary);
+            z-index: 1050;
+            padding: 12px 0;
+            box-shadow: 0 3px 15px rgba(0,0,0,.12);
+        }
+
+        .driveease-navbar .navbar-brand {
+            color: var(--gold) !important;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: .4px;
+        }
+
+        .driveease-navbar .nav-link {
+            color: white !important;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 12px;
+            transition: .2s;
+        }
+
+        .driveease-navbar .nav-link:hover {
+            color: var(--gold) !important;
+        }
+
+        .driveease-navbar .btn-warning {
+            background: var(--gold);
+            border: none;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .driveease-navbar .btn-warning:hover {
+            background: #e5a82e;
+        }
+
+        .driveease-navbar .btn-outline-light {
+            font-weight: 600;
+        }
+
+        /* HERO */
+
+        .hero-section {
+            min-height: 570px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background:
+                linear-gradient(90deg, rgba(10,25,42,.92), rgba(10,25,42,.45)),
+                url("https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600")
+                center/cover no-repeat;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 680px;
+            padding: 85px 0;
+        }
+
+        .hero-label {
+            display: inline-block;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .hero-section h1 {
+            font-size: clamp(38px, 5vw, 62px);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        .hero-section p {
+            font-size: 17px;
+            line-height: 1.8;
+            color: #e3e9ef;
+            max-width: 560px;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--primary);
+            border: none;
+            font-weight: 700;
+            padding: 13px 25px;
+            border-radius: 7px;
+        }
+
+        .btn-gold:hover {
+            background: #e5a82e;
+            color: var(--primary);
+        }
+
+        .btn-transparent {
+            color: white;
+            border: 1px solid white;
+            padding: 12px 25px;
+            border-radius: 7px;
+            font-weight: 600;
+        }
+
+        .btn-transparent:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* STATS */
+
+        .stats-section {
+            background: var(--primary);
+            color: white;
+            padding: 28px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-item h3 {
+            color: var(--gold);
+            font-size: 29px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-item p {
+            margin: 0;
+            color: #dce3eb;
+            font-size: 13px;
+        }
+
+        /* SECTION COMMON */
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 42px;
+        }
+
+        .section-heading span {
+            color: #bd8620;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .section-heading h2 {
+            color: var(--primary);
+            font-size: 34px;
+            font-weight: 800;
+            margin-top: 10px;
+        }
+
+        .section-heading p {
+            color: #718096;
+            margin-top: 10px;
+        }
+
+        /* SEARCH */
+
+        .search-section {
+            background: var(--light);
+            padding: 55px 0;
+        }
+
+        .search-card {
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(20,40,63,.08);
+            margin-top: -95px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .search-card label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .search-card .form-control,
+        .search-card .form-select {
+            min-height: 46px;
+            border: 1px solid #dce2e9;
+            border-radius: 7px;
+        }
+
+        .search-card .form-control:focus,
+        .search-card .form-select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 .2rem rgba(245,185,66,.15);
+        }
+
+        /* VEHICLES */
+
+        .vehicles-section {
+            background: white;
+        }
+
+        #vehicleList {
+            min-height: 120px;
+        }
+
+        #vehicleList .card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 22px rgba(20,40,63,.09);
+            transition: .25s;
+        }
+
+        #vehicleList .card:hover {
+            transform: translateY(-5px);
+        }
+
+        #vehicleList .card img {
+            height: 210px;
+            object-fit: cover;
+        }
+
+        /* ABOUT */
+
+        .about-section {
+            background: var(--light);
+        }
+
+        .about-image {
+            width: 100%;
+            height: 390px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .about-content h2 {
+            color: var(--primary);
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .about-content p {
+            color: #667487;
+            line-height: 1.8;
+        }
+
+        .about-point {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            align-items: center;
+        }
+
+        .about-point span {
+            background: #fff0ca;
+            color: #9b6b0c;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .about-point strong {
+            color: var(--primary);
+        }
+
+        /* CONTACT */
+
+        .contact-section {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 65px 15px;
+        }
+
+        .contact-section h2 {
+            font-weight: 800;
+            font-size: 34px;
+        }
+
+        .contact-section p {
+            color: #dce3eb;
+            margin: 15px 0 25px;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            background: #0d1d2e;
+            color: #dce3eb;
+            padding: 25px 0;
+            text-align: center;
+        }
+
+        .footer strong {
+            color: var(--gold);
+        }
+
+        @media (max-width: 991px) {
+            .driveease-navbar .navbar-collapse {
+                padding: 15px 0;
+            }
+
+            .driveease-navbar .nav-link {
+                margin: 5px 0;
+            }
+
+            .navbar-actions {
+                margin-top: 12px;
+            }
+
+            .search-card {
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section {
+                min-height: 510px;
+            }
+
+            .hero-content {
+                padding: 65px 0;
+            }
+
+            .section-padding {
+                padding: 55px 0;
+            }
+
+            .section-heading h2,
+            .about-content h2,
+            .contact-section h2 {
+                font-size: 28px;
+            }
+
+            .about-image {
+                height: 270px;
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- COMMON FIXED NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark driveease-navbar">
+    <div class="container">
+
+        <a class="navbar-brand" href="index.html">DriveEase</a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#vehicles">Vehicles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+
+            <div class="d-flex gap-2 navbar-actions">
+                <a href="login.html" class="btn btn-outline-light">Login</a>
+                <a href="register.html" class="btn btn-warning">Register</a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+
+            <span class="hero-label">YOUR JOURNEY, OUR PRIORITY</span>
+
+            <h1>Find Your Perfect Ride. Travel With Ease.</h1>
+
+            <p>
+                Discover the freedom of the road with DriveEase.
+                Choose your vehicle, plan your journey and enjoy
+                a simple and comfortable rental experience.
+            </p>
+
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <a href="#vehicles" class="btn btn-gold">
+                    Explore Vehicles
+                </a>
+
+                <a href="#about" class="btn btn-transparent">
+                    Learn More
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-6 col-md-3 stat-item">
+                <h3>100+</h3>
+                <p>Vehicles</p>
+            </div>
+
+            <div class="col-6 col-md-3 stat-item">
+                <h3>500+</h3>
+                <p>Happy Customers</p>
+            </div>
+
+            <div class="col-6 col-md-3 stat-item">
+                <h3>24/7</h3>
+                <p>Customer Support</p>
+            </div>
+
+            <div class="col-6 col-md-3 stat-item">
+                <h3>100%</h3>
+                <p>Convenience</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SEARCH -->
+
+<section class="search-section">
+    <div class="container">
+
+        <div class="search-card">
+            <h4 class="fw-bold mb-4" style="color:#14283f;">
+                Find Your Vehicle
+            </h4>
+
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label for="category">Vehicle Category</label>
+                    <select class="form-select" id="category">
+                        <option value="">All Categories</option>
+                        <option value="CAR">Car</option>
+                        <option value="BIKE">Bike</option>
+                        <option value="SUV">SUV</option>
+                        <option value="BUS">Bus</option>
+                        <option value="VAN">Van</option>
+                        <option value="SCOOTY">Scooty</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="pickupDate">Pickup Date</label>
+                    <input type="date" class="form-control" id="pickupDate">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="returnDate">Return Date</label>
+                    <input type="date" class="form-control" id="returnDate">
+                </div>
+
+                <div class="col-md-3">
+                    <button class="btn btn-gold w-100"
+                            type="button"
+                            onclick="searchVehicles()">
+                        Search Vehicles
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- VEHICLES -->
+
+<section class="vehicles-section section-padding" id="vehicles">
+    <div class="container">
+
+        <div class="section-heading">
+            <span>OUR FLEET</span>
+            <h2>Explore Our Vehicles</h2>
+            <p>Choose the right vehicle for your next journey.</p>
+        </div>
+
+        <div class="row g-4" id="vehicleList">
+            <div class="col-12 text-center text-muted">
+                Loading vehicles...
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ABOUT -->
+
+<section class="about-section section-padding" id="about">
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-6">
+                <img
+                    src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1000"
+                    alt="Car driving on a road"
+                    class="about-image">
+            </div>
+
+            <div class="col-lg-6 about-content">
+
+                <span class="fw-bold"
+                      style="color:#bd8620;letter-spacing:2px;">
+                    ABOUT DRIVE EASE
+                </span>
+
+                <h2 class="mt-2">
+                    Making Every Journey Easier
+                </h2>
+
+                <p>
+                    DriveEase is designed to make vehicle rentals
+                    convenient and accessible. Whether you are planning
+                    a short trip or a long journey, find a vehicle
+                    that matches your needs.
+                </p>
+
+                <div class="about-point">
+                    <span>✓</span>
+                    <strong>Wide range of vehicles</strong>
+                </div>
+
+                <div class="about-point">
+                    <span>✓</span>
+                    <strong>Simple online booking</strong>
+                </div>
+
+                <div class="about-point">
+                    <span>✓</span>
+                    <strong>Convenient rental experience</strong>
+                </div>
+
+                <div class="about-point">
+                    <span>✓</span>
+                    <strong>Easy booking management</strong>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+
+<section class="contact-section" id="contact">
+    <div class="container">
+
+        <h2>Ready to Start Your Journey?</h2>
+
+        <p>
+            Find your perfect vehicle and make your next trip memorable.
+        </p>
+
+        <a href="register.html" class="btn btn-gold">
+            Get Started
+        </a>
+
+    </div>
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+    <div class="container">
+        <p class="mb-0">
+            © 2026 <strong>DriveEase</strong>.
+            All Rights Reserved.
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
+
+</body>
+</html>

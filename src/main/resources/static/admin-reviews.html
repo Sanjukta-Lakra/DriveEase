@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Reviews | DriveEase</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/admin-layout.css">
+
+    <style>
+        :root {
+            --primary: #14283f;
+            --secondary: #203d59;
+            --gold: #f5b942;
+            --light: #f5f7fa;
+            --text: #263445;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--light);
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* PAGE BANNER */
+
+        .page-banner {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
+            border-radius: 14px;
+            padding: 25px 30px;
+            margin-bottom: 28px;
+            color: var(--white);
+            box-shadow: 0 5px 16px rgba(20,40,63,.12);
+        }
+
+        .page-banner h2 {
+            font-size: 27px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-banner p {
+            font-size: 14px;
+            margin: 0;
+            color: #e2eaf2;
+        }
+
+        .page-title {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* STATISTICS */
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.05);
+            border-left: 4px solid var(--gold);
+            height: 100%;
+        }
+
+        .stat-number {
+            color: var(--primary);
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        /* CONTENT CARD */
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.05);
+        }
+
+        .table thead th {
+            background: var(--primary);
+            color: white;
+            font-weight: 500;
+            white-space: nowrap;
+            padding: 13px;
+        }
+
+        .table tbody td {
+            padding: 14px 13px;
+            vertical-align: middle;
+        }
+
+        .search-box {
+            max-width: 350px;
+        }
+
+        .rating {
+            color: #e5a000;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .comment-cell {
+            min-width: 220px;
+            max-width: 300px;
+            white-space: normal;
+        }
+
+        .empty-state {
+            padding: 45px 15px;
+            text-align: center;
+            color: #718096;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 576px) {
+
+            .page-banner {
+                min-height: 130px;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .page-banner h2 {
+                font-size: 22px;
+            }
+
+            .page-banner p {
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .content-card {
+                padding: 14px;
+            }
+
+            .search-box {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .stat-card {
+                padding: 17px;
+            }
+
+            .stat-number {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- MOBILE HEADER -->
+
+<div class="mobile-admin-bar">
+
+    <a href="admin-dashboard.html" class="mobile-admin-brand">
+        DriveEase
+    </a>
+
+    <button class="sidebar-toggle"
+            onclick="toggleSidebar()"
+            aria-label="Open navigation">
+        ☰
+    </button>
+
+</div>
+
+<div class="sidebar-backdrop"
+     id="sidebarBackdrop"
+     onclick="closeSidebar()">
+</div>
+
+<!-- ADMIN SIDEBAR -->
+
+<aside class="admin-sidebar" id="adminSidebar">
+
+    <a href="admin-dashboard.html" class="sidebar-brand">
+        DriveEase
+    </a>
+
+    <div class="sidebar-heading">
+        MAIN MENU
+    </div>
+
+    <nav class="sidebar-nav">
+
+        <a href="admin-dashboard.html" class="nav-link">
+            Dashboard
+        </a>
+
+        <a href="admin-vehicles.html" class="nav-link">
+            Manage Vehicles
+        </a>
+
+        <a href="admin-bookings.html" class="nav-link">
+            Manage Bookings
+        </a>
+
+        <a href="admin-users.html" class="nav-link">
+            Manage Users
+        </a>
+
+        <a href="admin-customers.html" class="nav-link">
+            Manage Customers
+        </a>
+
+        <a href="admin-reviews.html" class="nav-link active">
+            Manage Reviews
+        </a>
+
+        <a href="admin-reports.html" class="nav-link">
+            Reports &amp; Analytics
+        </a>
+
+        <a href="admin-payments.html" class="nav-link">
+            Payment Management
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-admin-label">
+            ADMIN PANEL
+        </div>
+
+        <button class="sidebar-logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+
+<main class="admin-content">
+
+    <div class="page-banner">
+        <h2>Review Management</h2>
+        <p>Monitor customer feedback and manage vehicle reviews.</p>
+    </div>
+
+    <!-- STATISTICS -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4 col-sm-6">
+            <div class="stat-card">
+                <div class="text-muted">Total Reviews</div>
+                <div class="stat-number" id="totalReviews">0</div>
+                <small class="text-muted">Customer reviews</small>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+            <div class="stat-card">
+                <div class="text-muted">Average Rating</div>
+                <div class="stat-number" id="averageRating">0.0</div>
+                <small class="text-muted">Out of 5 stars</small>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6">
+            <div class="stat-card">
+                <div class="text-muted">Five Star Reviews</div>
+                <div class="stat-number" id="fiveStarReviews">0</div>
+                <small class="text-muted">Excellent ratings</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- REVIEW LIST -->
+
+    <div class="content-card">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+            <div>
+                <h5 class="page-title mb-1">Customer Reviews</h5>
+                <small class="text-muted" id="reviewCount">
+                    Loading reviews...
+                </small>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+
+                <input type="text"
+                       id="searchInput"
+                       class="form-control search-box"
+                       placeholder="Search customer, vehicle, comment..."
+                       oninput="applyFilters()">
+
+                <select id="ratingFilter"
+                        class="form-select"
+                        style="width:160px"
+                        onchange="applyFilters()">
+
+                    <option value="ALL">All Ratings</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div id="message"></div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Review ID</th>
+                        <th>Customer</th>
+                        <th>Vehicle</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>Review Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="reviewTable">
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            Loading reviews...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer class="admin-footer">
+    © 2026 DriveEase. All Rights Reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    let allReviews = [];
+
+    // SIDEBAR FUNCTIONS
+
+    function toggleSidebar() {
+
+        document.getElementById("adminSidebar")
+            .classList.toggle("show");
+
+        document.getElementById("sidebarBackdrop")
+            .classList.toggle("show");
+    }
+
+    function closeSidebar() {
+
+        document.getElementById("adminSidebar")
+            .classList.remove("show");
+
+        document.getElementById("sidebarBackdrop")
+            .classList.remove("show");
+    }
+
+    // CHECK ADMIN AUTHENTICATION
+
+    async function checkAdmin() {
+
+        try {
+
+            const response = await fetch("/api/auth/me", {
+                credentials: "same-origin"
+            });
+
+            if (!response.ok) {
+                window.location.href = "login.html";
+                return false;
+            }
+
+            const user = await response.json();
+
+            if (user.role !== "ADMIN") {
+                window.location.href = "customer-dashboard.html";
+                return false;
+            }
+
+            return true;
+
+        } catch (error) {
+
+            console.error("Authentication error:", error);
+            window.location.href = "login.html";
+            return false;
+        }
+    }
+
+    // LOAD ALL REVIEWS
+
+    async function loadReviews() {
+
+        try {
+
+            const response = await fetch("/api/reviews", {
+                credentials: "same-origin"
+            });
+
+            if (response.status === 401 || response.status === 403) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Unable to load reviews.");
+            }
+
+            const data = await response.json();
+
+            allReviews = Array.isArray(data) ? data : [];
+
+            updateStatistics();
+
+            applyFilters();
+
+        } catch (error) {
+
+            console.error("Review loading error:", error);
+
+            document.getElementById("message").innerHTML =
+                '<div class="alert alert-danger">' +
+                escapeHtml(error.message) +
+                '</div>';
+
+            document.getElementById("reviewTable").innerHTML = "";
+
+            document.getElementById("reviewCount").textContent =
+                "Unable to load reviews";
+        }
+    }
+
+    // UPDATE STATISTICS
+
+    function updateStatistics() {
+
+        const total = allReviews.length;
+
+        const ratingTotal = allReviews.reduce(
+            (sum, review) => sum + Number(review.rating || 0),
+            0
+        );
+
+        const average = total > 0 ? ratingTotal / total : 0;
+
+        const fiveStars = allReviews.filter(
+            review => Number(review.rating) === 5
+        ).length;
+
+        document.getElementById("totalReviews").textContent = total;
+
+        document.getElementById("averageRating").textContent =
+            average.toFixed(1);
+
+        document.getElementById("fiveStarReviews").textContent =
+            fiveStars;
+    }
+
+    // APPLY SEARCH AND RATING FILTERS
+
+    function applyFilters() {
+
+        const search = document.getElementById("searchInput")
+            .value.trim().toLowerCase();
+
+        const rating = document.getElementById("ratingFilter").value;
+
+        const filtered = allReviews.filter(review => {
+
+            const matchesSearch =
+                String(review.userName || "").toLowerCase().includes(search) ||
+                String(review.vehicleName || "").toLowerCase().includes(search) ||
+                String(review.comment || "").toLowerCase().includes(search);
+
+            const matchesRating =
+                rating === "ALL" ||
+                Number(review.rating) === Number(rating);
+
+            return matchesSearch && matchesRating;
+        });
+
+        displayReviews(filtered);
+    }
+
+    // DISPLAY REVIEWS
+
+    function displayReviews(reviews) {
+
+        const table = document.getElementById("reviewTable");
+
+        document.getElementById("reviewCount").textContent =
+            "Showing " + reviews.length + " review(s)";
+
+        if (reviews.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">
+                            <h6>No reviews found</h6>
+                            <p class="mb-0">
+                                Customer reviews will appear here when submitted.
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        table.innerHTML = reviews.map(review => {
+
+            const rating = Math.max(
+                0,
+                Math.min(5, Number(review.rating) || 0)
+            );
+
+            return `
+
+                <tr>
+
+                    <td>${escapeHtml(review.id)}</td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(review.userName || "N/A")}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(review.vehicleName || "N/A")}
+                    </td>
+
+                    <td>
+                        <span class="rating">
+                            ${"★".repeat(rating)}
+                            <span class="text-muted">
+                                ${rating}/5
+                            </span>
+                        </span>
+                    </td>
+
+                    <td class="comment-cell">
+                        ${escapeHtml(review.comment || "No comment")}
+                    </td>
+
+                    <td>
+                        ${formatDate(review.createdAt)}
+                    </td>
+
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger"
+                                onclick="deleteReview(${Number(review.id)})">
+                            Delete
+                        </button>
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+    }
+
+    // DELETE REVIEW
+
+    async function deleteReview(reviewId) {
+
+        const confirmed = confirm(
+            "Are you sure you want to delete review #" + reviewId + "?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                "/api/reviews/" + reviewId,
+                {
+                    method: "DELETE",
+                    credentials: "same-origin"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to delete review.");
+            }
+
+            allReviews = allReviews.filter(
+                review => Number(review.id) !== Number(reviewId)
+            );
+
+            updateStatistics();
+
+            applyFilters();
+
+            showMessage("Review deleted successfully.", "success");
+
+        } catch (error) {
+
+            console.error("Review deletion error:", error);
+            showMessage(error.message, "danger");
+        }
+    }
+
+    // SHOW MESSAGE
+
+    function showMessage(message, type) {
+
+        const messageBox = document.getElementById("message");
+
+        messageBox.innerHTML = `
+            <div class="alert alert-${type}">
+                ${escapeHtml(message)}
+            </div>
+        `;
+    }
+
+    // FORMAT DATE
+
+    function formatDate(dateValue) {
+
+        if (!dateValue) {
+            return "N/A";
+        }
+
+        const date = new Date(dateValue);
+
+        if (isNaN(date.getTime())) {
+            return "N/A";
+        }
+
+        return date.toLocaleDateString("en-IN");
+    }
+
+    // ESCAPE API VALUES
+
+    function escapeHtml(value) {
+
+        return String(value ?? "").replace(/[&<>"']/g, function(char) {
+
+            const entities = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            };
+
+            return entities[char];
+        });
+    }
+
+    // LOGOUT
+
+    async function logout() {
+
+        try {
+
+            await fetch("/api/auth/logout", {
+                method: "POST",
+                credentials: "same-origin"
+            });
+
+        } catch (error) {
+
+            console.error("Logout error:", error);
+
+        } finally {
+
+            window.location.href = "login.html";
+        }
+    }
+
+    // INITIALIZE
+
+    async function initializePage() {
+
+        const isAdmin = await checkAdmin();
+
+        if (isAdmin) {
+            await loadReviews();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", initializePage);
+
+</script>
+
+</body>
+</html>

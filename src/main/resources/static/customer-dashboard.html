@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Dashboard | DriveEase</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        /* Dashboard Cards */
+
+        .dashboard-card {
+            background: #ffffff;
+            border: 1px solid #e6ebf1;
+            border-radius: 13px;
+            padding: 25px;
+            height: 100%;
+            box-shadow: 0 5px 18px rgba(20, 40, 63, 0.06);
+            transition: 0.25s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(20, 40, 63, 0.12);
+        }
+
+        .dashboard-card h5 {
+            color: #14283f;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .dashboard-card p {
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.7;
+            min-height: 48px;
+        }
+
+        .dashboard-card .btn {
+            background: #f5b942;
+            color: #14283f;
+            font-weight: 600;
+            border: none;
+            padding: 10px 18px;
+        }
+
+        .dashboard-card .btn:hover {
+            background: #e6a72f;
+            color: #14283f;
+        }
+
+        .dashboard-section-title {
+            color: #14283f;
+            font-weight: 750;
+            margin-bottom: 22px;
+        }
+
+        .dashboard-footer {
+            background: #14283f;
+            color: #ffffff;
+            padding: 18px;
+            margin-top: 35px;
+        }
+
+    </style>
+
+</head>
+
+<body class="customer-page">
+
+    <!-- Fixed Customer Header -->
+
+    <nav class="navbar navbar-expand-lg customer-header">
+
+        <div class="container">
+
+            <a class="navbar-brand" href="customer-dashboard.html">
+                DriveEase
+            </a>
+
+            <button class="navbar-toggler bg-light"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#customerNavbar"
+                    aria-controls="customerNavbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse" id="customerNavbar">
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                    <li class="nav-item">
+                        <a class="nav-link active"
+                           href="customer-dashboard.html">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="browse-vehicles.html">
+                            Browse Vehicles
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="my-bookings.html">
+                            My Bookings
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="my-payments.html">
+                            My Payments
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="customer-reviews.html">
+                            Reviews
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="customer-profile.html">
+                            My Profile
+                        </a>
+                    </li>
+
+                    <li class="nav-item ms-lg-2">
+
+                        <button onclick="logout()"
+                                class="btn btn-warning btn-sm px-3 fw-semibold">
+                            Logout
+                        </button>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Dashboard Content -->
+
+    <main class="container customer-content">
+
+        <!-- Common Customer Heading -->
+        <div class="reviews-header">
+            <h2 id="welcomeMessage">Welcome to DriveEase!</h2>
+            <p>Manage your vehicle rentals and explore your next journey.</p>
+        </div>
+
+
+        <!-- Dashboard Section -->
+
+        <h3 class="dashboard-section-title">
+            Customer Dashboard
+        </h3>
+
+
+        <!-- Dashboard Cards -->
+
+        <div class="row g-4">
+
+            <!-- Browse Vehicles -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="dashboard-card">
+
+                    <h5>Browse Vehicles</h5>
+
+                    <p>
+                        Explore available cars, bikes and other vehicles
+                        for your next journey.
+                    </p>
+
+                    <a href="browse-vehicles.html" class="btn">
+                        Explore Vehicles
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- My Bookings -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="dashboard-card">
+
+                    <h5>My Bookings</h5>
+
+                    <p>
+                        View your booking history and track rental status.
+                    </p>
+
+                    <a href="my-bookings.html" class="btn">
+                        View Bookings
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- My Payments -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="dashboard-card">
+
+                    <h5>My Payments</h5>
+
+                    <p>
+                        Check your rental payments and transaction details.
+                    </p>
+
+                    <a href="my-payments.html" class="btn">
+                        View Payments
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- Customer Reviews -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="dashboard-card">
+
+                    <h5>Customer Reviews</h5>
+
+                    <p>
+                        View your reviews and share feedback about vehicles.
+                    </p>
+
+                    <a href="customer-reviews.html" class="btn">
+                        View Reviews
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- My Profile -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="dashboard-card">
+
+                    <h5>My Profile</h5>
+
+                    <p>
+                        View and manage your personal account information.
+                    </p>
+
+                    <a href="customer-profile.html" class="btn">
+                        View Profile
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer class="dashboard-footer text-center">
+
+        © 2026 DriveEase. All Rights Reserved.
+
+    </footer>
+
+
+    <!-- Bootstrap JavaScript -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    <!-- Customer Login and Logout -->
+
+    <script>
+
+        // Check logged-in customer
+
+        async function checkLogin() {
+
+            try {
+
+                const response = await fetch("/api/auth/me", {
+                    method: "GET",
+                    credentials: "same-origin"
+                });
+
+                if (!response.ok) {
+                    window.location.replace("login.html");
+                    return;
+                }
+
+                const user = await response.json();
+
+                if (user.role !== "CUSTOMER") {
+
+                    alert("You are not authorized to access this dashboard.");
+
+                    window.location.replace("index.html");
+
+                    return;
+                }
+
+                document.getElementById("welcomeMessage").textContent =
+                    "Welcome, " + (user.name || user.email) + "!";
+
+            } catch (error) {
+
+                window.location.replace("login.html");
+
+            }
+
+        }
+
+
+        // Logout
+
+        async function logout() {
+
+            try {
+
+                const response = await fetch("/api/auth/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+
+                if (response.status === 204 || response.ok) {
+
+                    window.location.replace("login.html");
+
+                } else {
+
+                    alert("Unable to logout. Please try again.");
+
+                }
+
+            } catch (error) {
+
+                alert("Server connection failed.");
+
+            }
+
+        }
+
+
+        // Run login check when page loads
+
+        document.addEventListener("DOMContentLoaded", checkLogin);
+
+    </script>
+
+</body>
+
+</html>

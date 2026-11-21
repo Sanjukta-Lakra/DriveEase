@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | DriveEase</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --primary: #14283f;
+            --secondary: #203d59;
+            --gold: #f5b942;
+            --light: #f5f7fa;
+            --text: #263445;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding-top: 70px;
+            background: var(--light);
+            font-family: Arial, sans-serif;
+        }
+
+        /* COMMON NAVBAR */
+
+        .driveease-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 70px;
+            background: var(--primary);
+            z-index: 1050;
+            padding: 12px 0;
+            box-shadow: 0 3px 15px rgba(0,0,0,.12);
+        }
+
+        .driveease-navbar .navbar-brand {
+            color: var(--gold) !important;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: .4px;
+        }
+
+        .driveease-navbar .nav-link {
+            color: white !important;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 12px;
+            transition: .2s;
+        }
+
+        .driveease-navbar .nav-link:hover {
+            color: var(--gold) !important;
+        }
+
+        .driveease-navbar .btn-warning {
+            background: var(--gold);
+            border: none;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .driveease-navbar .btn-warning:hover {
+            background: #e5a82e;
+        }
+
+        .driveease-navbar .btn-outline-light {
+            font-weight: 600;
+        }
+
+        /* REGISTER LAYOUT */
+
+        .auth-section {
+            min-height: calc(100vh - 70px);
+            padding: 40px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            max-width: 1100px;
+            width: 100%;
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(20,40,63,.12);
+        }
+
+        .auth-image {
+            position: relative;
+            min-height: 620px;
+            background:
+                linear-gradient(rgba(12,30,49,.45), rgba(12,30,49,.85)),
+                url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1000")
+                center/cover no-repeat;
+            display: flex;
+            align-items: flex-end;
+            padding: 42px;
+            color: white;
+        }
+
+        .auth-image h2 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .auth-image p {
+            color: #e1e7ed;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .auth-form-area {
+            padding: 38px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-logo-text {
+            color: #bd8620;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .auth-form-area h1 {
+            color: var(--primary);
+            font-size: 31px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            color: #758194;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .form-control {
+            min-height: 44px;
+            border: 1px solid #dce2e9;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 .2rem rgba(245,185,66,.15);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper .form-control {
+            padding-right: 65px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .register-btn {
+            width: 100%;
+            min-height: 48px;
+            background: var(--primary);
+            border: none;
+            border-radius: 7px;
+            color: white;
+            font-weight: 700;
+            margin-top: 8px;
+            transition: .2s;
+        }
+
+        .register-btn:hover {
+            background: var(--secondary);
+        }
+
+        .register-btn:disabled {
+            opacity: .7;
+        }
+
+        .auth-bottom {
+            text-align: center;
+            color: #758194;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .auth-bottom a {
+            color: #a87413;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auth-bottom a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 991px) {
+            .driveease-navbar .navbar-collapse {
+                padding: 15px 0;
+            }
+
+            .driveease-navbar .nav-link {
+                margin: 5px 0;
+            }
+
+            .navbar-actions {
+                margin-top: 12px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .auth-container {
+                grid-template-columns: 1fr;
+                max-width: 480px;
+            }
+
+            .auth-image {
+                min-height: 190px;
+                padding: 25px;
+            }
+
+            .auth-image h2 {
+                font-size: 27px;
+            }
+
+            .auth-form-area {
+                padding: 30px 25px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .auth-form-area h1 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- COMMON FIXED NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark driveease-navbar">
+    <div class="container">
+
+        <a class="navbar-brand" href="index.html">DriveEase</a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html#vehicles">Vehicles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html#contact">Contact</a>
+                </li>
+            </ul>
+
+            <div class="d-flex gap-2 navbar-actions">
+                <a href="login.html" class="btn btn-outline-light">Login</a>
+                <a href="register.html" class="btn btn-warning">Register</a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- REGISTER -->
+
+<section class="auth-section">
+
+    <div class="auth-container">
+
+        <div class="auth-image">
+            <div>
+                <h2>Start Your Journey!</h2>
+                <p>
+                    Create your DriveEase account and discover
+                    a convenient way to book vehicles for your
+                    everyday travel and special journeys.
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-form-area">
+
+            <div class="auth-logo-text">JOIN DRIVE EASE</div>
+
+            <h1>Create Account</h1>
+
+            <p class="auth-subtitle">
+                Fill in your details to get started.
+            </p>
+
+            <div id="message" class="mb-3" aria-live="polite"></div>
+
+            <form id="registerForm">
+
+                <div class="row g-3">
+
+                    <div class="col-12">
+                        <label for="name" class="form-label">
+                            Full Name
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="name"
+                               placeholder="Enter your full name"
+                               maxlength="100"
+                               autocomplete="name"
+                               required>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="email" class="form-label">
+                            Email Address
+                        </label>
+
+                        <input type="email"
+                               class="form-control"
+                               id="email"
+                               placeholder="Enter your email"
+                               autocomplete="email"
+                               required>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="password" class="form-label">
+                            Password
+                        </label>
+
+                        <div class="password-wrapper">
+                            <input type="password"
+                                   class="form-control"
+                                   id="password"
+                                   placeholder="Minimum 8 characters"
+                                   minlength="8"
+                                   autocomplete="new-password"
+                                   required>
+
+                            <button type="button"
+                                    class="password-toggle"
+                                    id="togglePassword">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">
+                            Phone Number
+                        </label>
+
+                        <input type="tel"
+                               class="form-control"
+                               id="phone"
+                               placeholder="10-digit number"
+                               pattern="[6-9][0-9]{9}"
+                               maxlength="10"
+                               inputmode="numeric"
+                               autocomplete="tel"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="drivingLicenseNumber"
+                               class="form-label">
+                            Driving License Number
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="drivingLicenseNumber"
+                               placeholder="Enter license number"
+                               required>
+                    </div>
+
+                </div>
+
+                <button type="submit"
+                        class="register-btn mt-4"
+                        id="registerButton">
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="auth-bottom">
+                Already have an account?
+                <a href="login.html">Sign In</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const registerForm = document.getElementById("registerForm");
+    const message = document.getElementById("message");
+    const registerButton = document.getElementById("registerButton");
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    function showMessage(text, type) {
+        message.className = "alert alert-" + type + " mb-3";
+        message.textContent = text;
+    }
+
+    togglePassword.addEventListener("click", function () {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            togglePassword.textContent = "Hide";
+        } else {
+            passwordInput.type = "password";
+            togglePassword.textContent = "Show";
+        }
+    });
+
+    registerForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = passwordInput.value;
+        const phone = document.getElementById("phone").value.trim();
+        const drivingLicenseNumber =
+            document.getElementById("drivingLicenseNumber").value.trim();
+
+        if (!/^[6-9][0-9]{9}$/.test(phone)) {
+            showMessage("Please enter a valid 10-digit phone number.", "danger");
+            return;
+        }
+
+        registerButton.disabled = true;
+        registerButton.textContent = "Creating Account...";
+        message.textContent = "";
+        message.className = "";
+
+        try {
+            const response = await fetch("/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "same-origin",
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password,
+                    phone: phone,
+                    drivingLicenseNumber: drivingLicenseNumber
+                })
+            });
+
+            const responseText = await response.text();
+
+            let result = {};
+
+            try {
+                result = responseText ? JSON.parse(responseText) : {};
+            } catch (parseError) {
+                result = { message: responseText };
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message ||
+                    result.error ||
+                    "Registration failed. Please try again."
+                );
+            }
+
+            showMessage(
+                result.message || "Registration successful! You can now sign in.",
+                "success"
+            );
+
+            registerForm.reset();
+
+        } catch (error) {
+            showMessage(
+                error.message || "Unable to register. Please try again.",
+                "danger"
+            );
+
+        } finally {
+            registerButton.disabled = false;
+            registerButton.textContent = "Create Account";
+        }
+    });
+</script>
+
+</body>
+</html>

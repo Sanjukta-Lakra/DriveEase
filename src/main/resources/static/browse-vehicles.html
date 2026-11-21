@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Browse Vehicles | DriveEase</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        /* Vehicle Cards */
+
+        .vehicle-card {
+            border: none;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: 0.3s ease;
+            height: 100%;
+            background: #ffffff;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(20, 40, 63, 0.12);
+        }
+
+        .vehicle-image {
+            height: 190px;
+            width: 100%;
+            object-fit: cover;
+            background: #f5f7fa;
+        }
+
+        .price {
+            color: #14283f;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .btn-green {
+            background: #14283f;
+            color: #ffffff;
+            border: none;
+            padding: 10px;
+            border-radius: 7px;
+        }
+
+        .btn-green:hover {
+            background: #203d59;
+            color: #f5b942;
+        }
+
+        /* Booking Modal */
+
+        .modal-header {
+            background: #14283f;
+            color: #ffffff;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #f5b942;
+            box-shadow: 0 0 0 0.2rem rgba(245, 185, 66, 0.2);
+        }
+
+        /* Category Filter */
+
+        .filter-section {
+            background: #ffffff;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(20, 40, 63, 0.05);
+        }
+
+        #message {
+            min-height: 25px;
+        }
+
+        @media (max-width: 768px) {
+
+            .vehicle-image {
+                height: 180px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body class="customer-page">
+
+    <!-- Fixed Customer Header -->
+
+    <nav class="navbar navbar-expand-lg customer-header">
+
+        <div class="container">
+
+            <a class="navbar-brand" href="customer-dashboard.html">
+                DriveEase
+            </a>
+
+            <button class="navbar-toggler bg-light"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#customerNavbar"
+                    aria-controls="customerNavbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse" id="customerNavbar">
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="customer-dashboard.html">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="browse-vehicles.html">
+                            Browse Vehicles
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-bookings.html">
+                            My Bookings
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-payments.html">
+                            My Payments
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="customer-reviews.html">
+                            Reviews
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="customer-profile.html">
+                            My Profile
+                        </a>
+                    </li>
+
+                    <li class="nav-item ms-lg-2">
+                        <button type="button"
+                                class="btn btn-warning btn-sm px-3 fw-semibold"
+                                onclick="logout()">
+                            Logout
+                        </button>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+
+    <main class="container customer-content">
+
+        <!-- Common Customer Heading -->
+
+        <div class="reviews-header">
+            <h2>Browse Vehicles</h2>
+            <p>Explore our available vehicles and find the perfect ride.</p>
+        </div>
+
+
+        <!-- Category Filter -->
+
+        <div class="filter-section mb-4">
+
+            <label for="categoryFilter" class="form-label fw-semibold">
+                Filter by Category
+            </label>
+
+            <select id="categoryFilter" class="form-select">
+
+                <option value="">All Categories</option>
+                <option value="CAR">Cars</option>
+                <option value="BIKE">Bikes</option>
+                <option value="SUV">SUVs</option>
+                <option value="BUS">Bus</option>
+                <option value="VAN">Vans</option>
+                <option value="SCOOTY">Scooty</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Message -->
+
+        <div id="message" class="text-center text-muted mb-3">
+            Loading vehicles...
+        </div>
+
+
+        <!-- Vehicle Cards -->
+
+        <div class="row g-4" id="vehicleList"></div>
+
+    </main>
+
+
+    <!-- Booking Modal -->
+
+    <div class="modal fade" id="bookingModal" tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Book Your Vehicle
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <h6 id="bookingVehicleName" class="fw-bold"></h6>
+
+                    <p class="text-muted">
+                        Rental Price:
+                        ₹<span id="bookingPrice"></span> / day
+                    </p>
+
+
+                    <form id="bookingForm">
+
+                        <div class="mb-3">
+
+                            <label for="pickupDate" class="form-label">
+                                Pickup Date
+                            </label>
+
+                            <input type="date"
+                                   id="pickupDate"
+                                   class="form-control"
+                                   required>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="returnDate" class="form-label">
+                                Return Date
+                            </label>
+
+                            <input type="date"
+                                   id="returnDate"
+                                   class="form-control"
+                                   required>
+
+                        </div>
+
+
+                        <div class="alert alert-warning">
+
+                            Total Amount:
+                            <strong id="totalAmount">₹0</strong>
+
+                        </div>
+
+
+                        <div id="bookingMessage"></div>
+
+
+                        <button type="submit"
+                                class="btn btn-green w-100">
+
+                            Confirm Booking
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Bootstrap JavaScript -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- DriveEase JavaScript -->
+
+    <script>
+
+        let allVehicles = [];
+        let selectedVehicle = null;
+
+
+        // Get today's date in local format (YYYY-MM-DD)
+
+        function getTodayDate() {
+
+            const today = new Date();
+
+            const year = today.getFullYear();
+
+            const month = String(today.getMonth() + 1).padStart(2, "0");
+
+            const day = String(today.getDate()).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        }
+
+
+        // Check whether customer is logged in
+
+        async function checkLogin() {
+
+            try {
+
+                const response = await fetch("/api/auth/me", {
+                    method: "GET",
+                    credentials: "same-origin"
+                });
+
+                if (!response.ok) {
+
+                    window.location.href = "login.html";
+
+                    return false;
+                }
+
+                const user = await response.json();
+
+                if (user.role !== "CUSTOMER") {
+
+                    window.location.href = "index.html";
+
+                    return false;
+                }
+
+                return true;
+
+            } catch (error) {
+
+                document.getElementById("message").textContent =
+                    "Unable to verify login. Please try again.";
+
+                return false;
+            }
+        }
+
+
+        // Logout customer
+
+        async function logout() {
+
+            try {
+
+                await fetch("/api/auth/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+
+            } finally {
+
+                window.location.href = "login.html";
+            }
+        }
+
+
+        // Load available vehicles
+
+        async function loadVehicles() {
+
+            const message = document.getElementById("message");
+
+            message.textContent = "Loading vehicles...";
+
+            try {
+
+                const response = await fetch("/api/vehicles/available");
+
+                if (!response.ok) {
+
+                    throw new Error("Unable to load vehicles.");
+                }
+
+                allVehicles = await response.json();
+
+                displayVehicles(allVehicles);
+
+            } catch (error) {
+
+                message.textContent =
+                    "Unable to load vehicles. Please try again.";
+            }
+        }
+
+
+        // Display vehicle cards
+
+        function displayVehicles(vehicles) {
+
+            const vehicleList = document.getElementById("vehicleList");
+
+            const message = document.getElementById("message");
+
+            vehicleList.innerHTML = "";
+
+            if (!vehicles || vehicles.length === 0) {
+
+                message.textContent = "No available vehicles found.";
+
+                return;
+            }
+
+            message.textContent = "";
+
+            vehicles.forEach(vehicle => {
+
+                const card = document.createElement("div");
+
+                card.className = "col-md-6 col-lg-4";
+
+
+                const cardContent = document.createElement("div");
+
+                cardContent.className =
+                    "card vehicle-card shadow-sm";
+
+
+                const image = document.createElement("img");
+
+                image.className = "vehicle-image";
+
+                image.alt = vehicle.name || "Vehicle";
+
+                image.src = vehicle.imageUrl ||
+                    "https://placehold.co/600x350?text=DriveEase";
+
+                image.onerror = function () {
+
+                    this.onerror = null;
+
+                    this.src =
+                        "https://placehold.co/600x350?text=DriveEase";
+                };
+
+
+                const body = document.createElement("div");
+
+                body.className = "card-body p-4";
+
+
+                const heading = document.createElement("h5");
+
+                heading.className = "fw-bold";
+
+                heading.textContent =
+                    `${vehicle.brand || ""} ${vehicle.model || ""}`;
+
+
+                const name = document.createElement("p");
+
+                name.className = "text-muted mb-2";
+
+                name.textContent = vehicle.name || "";
+
+
+                const details = document.createElement("p");
+
+                details.className = "small text-muted";
+
+                details.textContent =
+                    `${vehicle.category || ""} | ` +
+                    `${vehicle.fuelType || "N/A"} | ` +
+                    `${vehicle.transmission || "N/A"}`;
+
+
+                const price = document.createElement("div");
+
+                price.className = "price mb-3";
+
+                price.textContent =
+                    "₹" + Number(vehicle.pricePerDay).toLocaleString("en-IN");
+
+
+                const small = document.createElement("small");
+
+                small.className = "text-muted fs-6";
+
+                small.textContent = " / day";
+
+                price.appendChild(small);
+
+
+                const button = document.createElement("button");
+
+                button.className = "btn btn-green w-100";
+
+                button.textContent = "Book Now";
+
+                button.addEventListener("click", function () {
+
+                    openBooking(vehicle.id);
+                });
+
+
+                body.appendChild(heading);
+
+                body.appendChild(name);
+
+                body.appendChild(details);
+
+                body.appendChild(price);
+
+                body.appendChild(button);
+
+
+                cardContent.appendChild(image);
+
+                cardContent.appendChild(body);
+
+                card.appendChild(cardContent);
+
+                vehicleList.appendChild(card);
+
+            });
+        }
+
+
+        // Filter vehicles by category
+
+        document.getElementById("categoryFilter")
+            .addEventListener("change", function () {
+
+                const category = this.value;
+
+                const filteredVehicles = category
+                    ? allVehicles.filter(vehicle =>
+                        vehicle.category === category)
+                    : allVehicles;
+
+                displayVehicles(filteredVehicles);
+
+            });
+
+
+        // Open booking modal
+
+        function openBooking(vehicleId) {
+
+            selectedVehicle = allVehicles.find(
+                vehicle => vehicle.id === vehicleId
+            );
+
+            if (!selectedVehicle) {
+
+                alert("Vehicle not found.");
+
+                return;
+            }
+
+
+            document.getElementById("bookingVehicleName").textContent =
+                `${selectedVehicle.brand || ""} ${selectedVehicle.model || ""}`;
+
+
+            document.getElementById("bookingPrice").textContent =
+                Number(selectedVehicle.pricePerDay).toLocaleString("en-IN");
+
+
+            const pickupInput = document.getElementById("pickupDate");
+
+            const returnInput = document.getElementById("returnDate");
+
+
+            pickupInput.value = "";
+
+            returnInput.value = "";
+
+
+            const today = getTodayDate();
+
+            pickupInput.min = today;
+
+            returnInput.min = today;
+
+
+            document.getElementById("totalAmount").textContent = "₹0";
+
+            document.getElementById("bookingMessage").innerHTML = "";
+
+
+            const submitButton =
+                document.querySelector("#bookingForm button[type='submit']");
+
+            submitButton.disabled = false;
+
+            submitButton.textContent = "Confirm Booking";
+
+
+            const modal = new bootstrap.Modal(
+                document.getElementById("bookingModal")
+            );
+
+            modal.show();
+        }
+
+
+        // Calculate total rental amount
+
+        function calculateAmount() {
+
+            const pickup =
+                document.getElementById("pickupDate").value;
+
+            const returnDate =
+                document.getElementById("returnDate").value;
+
+
+            if (!pickup || !returnDate || !selectedVehicle) {
+
+                document.getElementById("totalAmount").textContent = "₹0";
+
+                return;
+            }
+
+
+            const start = new Date(pickup + "T00:00:00");
+
+            const end = new Date(returnDate + "T00:00:00");
+
+
+            const days = Math.round(
+                (end - start) / (1000 * 60 * 60 * 24)
+            );
+
+
+            if (days <= 0) {
+
+                document.getElementById("totalAmount").textContent = "₹0";
+
+                return;
+            }
+
+
+            const total = days * Number(selectedVehicle.pricePerDay);
+
+
+            document.getElementById("totalAmount").textContent =
+                "₹" + total.toLocaleString("en-IN");
+        }
+
+
+        // Update minimum return date when pickup date changes
+
+        document.getElementById("pickupDate")
+            .addEventListener("change", function () {
+
+                const returnInput =
+                    document.getElementById("returnDate");
+
+                returnInput.min = this.value || getTodayDate();
+
+                if (returnInput.value &&
+                    returnInput.value <= this.value) {
+
+                    returnInput.value = "";
+                }
+
+                calculateAmount();
+
+            });
+
+
+        // Recalculate when return date changes
+
+        document.getElementById("returnDate")
+            .addEventListener("change", calculateAmount);
+
+
+        // Submit booking
+
+        document.getElementById("bookingForm")
+            .addEventListener("submit", async function (event) {
+
+                event.preventDefault();
+
+                if (!selectedVehicle) {
+
+                    return;
+                }
+
+
+                const pickupDate =
+                    document.getElementById("pickupDate").value;
+
+                const returnDate =
+                    document.getElementById("returnDate").value;
+
+                const message =
+                    document.getElementById("bookingMessage");
+
+
+                if (!pickupDate || !returnDate) {
+
+                    message.textContent =
+                        "Please select both pickup and return dates.";
+
+                    message.className = "alert alert-danger";
+
+                    return;
+                }
+
+
+                if (returnDate <= pickupDate) {
+
+                    message.textContent =
+                        "Return date must be after pickup date.";
+
+                    message.className = "alert alert-danger";
+
+                    return;
+                }
+
+
+                const submitButton =
+                    document.querySelector("#bookingForm button[type='submit']");
+
+
+                submitButton.disabled = true;
+
+                submitButton.textContent = "Processing...";
+
+                message.textContent = "";
+
+
+                try {
+
+                    const response = await fetch(
+                        "/api/bookings?vehicleId=" + selectedVehicle.id,
+                        {
+                            method: "POST",
+
+                            credentials: "same-origin",
+
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                pickupDate: pickupDate,
+                                returnDate: returnDate
+                            })
+                        }
+                    );
+
+
+                    const responseText = await response.text();
+
+                    let result = {};
+
+                    try {
+
+                        result = responseText
+                            ? JSON.parse(responseText)
+                            : {};
+
+                    } catch (error) {
+
+                        result = {};
+                    }
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            result.message ||
+                            result.error ||
+                            responseText ||
+                            "Unable to create booking."
+                        );
+                    }
+
+
+                 // Show success message on the main page
+                    const pageMessage = document.getElementById("message");
+
+                    pageMessage.className = "alert alert-success text-center mb-3";
+
+                    pageMessage.textContent =
+                        "Booking successful! Your booking has been submitted. Status: PENDING";
+
+                    // Automatically close the booking modal
+                    const modalElement = document.getElementById("bookingModal");
+
+                    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+
+                    modal.hide();
+
+                    // Reset booking form
+                    document.getElementById("bookingForm").reset();
+
+                    document.getElementById("totalAmount").textContent = "₹0";
+
+
+                } catch (error) {
+
+                    message.className = "alert alert-danger";
+
+                    message.textContent =
+                        error.message || "Unable to create booking.";
+
+
+                    submitButton.disabled = false;
+
+                    submitButton.textContent = "Confirm Booking";
+                }
+
+            });
+
+
+        // Initialize page
+
+        async function initializePage() {
+
+            const loggedIn = await checkLogin();
+
+            if (loggedIn) {
+
+                await loadVehicles();
+            }
+        }
+
+        initializePage();
+
+    </script>
+
+</body>
+
+</html>

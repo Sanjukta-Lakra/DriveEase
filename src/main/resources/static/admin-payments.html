@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DriveEase | Payment Management</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+
+<link rel="stylesheet" href="css/admin-layout.css">
+
+<style>
+
+/* PAYMENT PAGE BANNER */
+
+.admin-page-banner {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(120deg, var(--primary), var(--secondary));
+    border-radius: 14px;
+    padding: 25px 30px;
+    margin-bottom: 28px;
+    color: var(--white);
+    box-shadow: 0 5px 16px rgba(20,40,63,.10);
+}
+
+.admin-page-banner h2 {
+    font-size: 27px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.admin-page-banner p {
+    font-size: 14px;
+    margin: 0;
+    color: #e2eaf2;
+}
+
+/* STATISTICS */
+
+.stat-card {
+    height: 100%;
+    background: var(--white);
+    border: 0;
+    border-radius: 12px;
+    padding: 23px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.06);
+}
+
+.stat-label {
+    color: #687789;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.stat-value {
+    color: var(--primary);
+    font-size: 29px;
+    font-weight: 800;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.stat-line {
+    width: 45px;
+    height: 4px;
+    border-radius: 5px;
+    background: var(--gold);
+    margin-top: 15px;
+}
+
+/* CONTENT CARDS */
+
+.content-card {
+    background: var(--white);
+    border: 0;
+    border-radius: 13px;
+    padding: 25px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.06);
+}
+
+.section-title {
+    color: var(--primary);
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.section-description {
+    color: #718096;
+    font-size: 13px;
+    margin-bottom: 22px;
+}
+
+.form-control,
+.form-select {
+    min-height: 42px;
+    border-radius: 7px;
+    font-size: 13px;
+    border-color: #dce2e9;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 .15rem rgba(245,185,66,.2);
+}
+
+/* PAYMENT TABLE */
+
+.payment-table {
+    min-width: 1050px;
+    margin-bottom: 0;
+}
+
+.payment-table thead th {
+    background: var(--primary);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 14px 12px;
+    white-space: nowrap;
+}
+
+.payment-table tbody td {
+    color: var(--text);
+    font-size: 13px;
+    padding: 13px 12px;
+    vertical-align: middle;
+}
+
+.payment-table tbody tr:hover {
+    background: #f5f8fc;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-success {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-failed {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.status-refunded {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.record-count {
+    color: #718096;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.empty-message {
+    padding: 35px !important;
+    text-align: center;
+    color: #718096 !important;
+}
+
+/* ACTION BUTTONS */
+
+.action-btn {
+    border: 0;
+    border-radius: 5px;
+    padding: 7px 11px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.trash-btn {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.restore-btn {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.view-trash-btn {
+    background: var(--primary);
+    color: white;
+    border: 0;
+    border-radius: 7px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.view-trash-btn:hover {
+    background: var(--secondary);
+    color: var(--gold);
+}
+
+/* SMALL SCREENS */
+
+@media (max-width: 576px) {
+
+    .admin-page-banner {
+        min-height: 130px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .admin-page-banner h2 {
+        font-size: 22px;
+    }
+
+    .admin-page-banner p {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .stat-card {
+        padding: 17px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .content-card {
+        padding: 17px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- MOBILE HEADER -->
+
+<div class="mobile-admin-bar">
+
+    <a href="admin-home.html" class="mobile-admin-brand">
+        DriveEase
+    </a>
+
+    <button class="sidebar-toggle"
+            onclick="toggleSidebar()"
+            aria-label="Open navigation">
+        ☰
+    </button>
+
+</div>
+
+<!-- SIDEBAR BACKDROP -->
+
+<div class="sidebar-backdrop"
+     id="sidebarBackdrop"
+     onclick="closeSidebar()">
+</div>
+
+<!-- ADMIN SIDEBAR -->
+
+<aside class="admin-sidebar" id="adminSidebar">
+
+    <a href="admin-home.html" class="sidebar-brand">
+        DriveEase
+    </a>
+
+    <div class="sidebar-heading">MAIN MENU</div>
+
+    <nav class="sidebar-nav">
+
+        <a href="admin-home.html" class="nav-link">
+            Dashboard
+        </a>
+
+        <a href="admin-vehicles.html" class="nav-link">
+            Manage Vehicles
+        </a>
+
+        <a href="admin-bookings.html" class="nav-link">
+            Manage Bookings
+        </a>
+
+        <a href="admin-users.html" class="nav-link">
+            Manage Users
+        </a>
+
+        <a href="admin-customers.html" class="nav-link">
+            Manage Customers
+        </a>
+
+        <a href="admin-reviews.html" class="nav-link">
+            Manage Reviews
+        </a>
+
+        <a href="admin-reports.html" class="nav-link">
+            Reports &amp; Analytics
+        </a>
+
+        <a href="admin-payments.html" class="nav-link active">
+            Payment Management
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-admin-label">
+            ADMIN PANEL
+        </div>
+
+        <button class="sidebar-logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+
+<main class="admin-content">
+
+    <!-- PAGE BANNER -->
+
+    <section class="admin-page-banner">
+
+        <h2>Payment Management</h2>
+
+        <p>
+            Monitor transactions, payment statuses and total revenue.
+        </p>
+
+    </section>
+
+    <!-- STATISTICS -->
+
+    <section class="row g-3 g-md-4 mb-4">
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Total Payments</div>
+                <h3 class="stat-value" id="totalPayments">0</h3>
+                <div class="stat-line"></div>
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Successful Payments</div>
+                <h3 class="stat-value" id="successfulPayments">0</h3>
+                <div class="stat-line"></div>
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Pending Payments</div>
+                <h3 class="stat-value" id="pendingPayments">0</h3>
+                <div class="stat-line"></div>
+            </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-label">Total Revenue</div>
+                <h3 class="stat-value" id="totalRevenue">₹0</h3>
+                <div class="stat-line"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ALL PAYMENTS -->
+
+    <section class="content-card mb-4">
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+
+            <div>
+                <h4 class="section-title">All Payments</h4>
+
+                <p class="section-description">
+                    View and search all customer payment transactions.
+                </p>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 mb-3 mb-md-0">
+
+                <span class="record-count" id="recordCount">
+                    0 Payments
+                </span>
+
+                <button class="view-trash-btn" onclick="toggleTrash()">
+                    View Trash
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- SEARCH AND FILTER -->
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-12 col-md-8">
+
+                <input type="text"
+                       class="form-control"
+                       id="searchInput"
+                       placeholder="Search by Payment ID or Booking ID..."
+                       oninput="filterPayments()">
+
+            </div>
+
+            <div class="col-12 col-md-4">
+
+                <select class="form-select"
+                        id="statusFilter"
+                        onchange="filterPayments()">
+
+                    <option value="ALL">All Payment Status</option>
+                    <option value="SUCCESS">Success</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="FAILED">Failed</option>
+                    <option value="REFUNDED">Refunded</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div id="errorMessage" class="alert alert-danger d-none"></div>
+        <div id="successMessage" class="alert alert-success d-none"></div>
+
+        <!-- PAYMENT TABLE -->
+
+        <div class="table-responsive">
+
+            <table class="table payment-table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Booking ID</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Transaction ID</th>
+                        <th>Status</th>
+                        <th>Payment Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="paymentTable">
+
+                    <tr>
+                        <td colspan="8" class="empty-message">
+                            Loading payments...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- PAYMENT TRASH -->
+
+    <section class="content-card d-none" id="trashSection">
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+
+            <div>
+                <h4 class="section-title">Payment Trash</h4>
+
+                <p class="section-description">
+                    Restore deleted payments or permanently remove them.
+                </p>
+            </div>
+
+            <button class="btn btn-outline-secondary btn-sm"
+                    onclick="toggleTrash()">
+                Close Trash
+            </button>
+
+        </div>
+
+        <div id="trashError" class="alert alert-danger d-none"></div>
+
+        <div class="table-responsive">
+
+            <table class="table payment-table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Booking ID</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Transaction ID</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="trashPaymentTable">
+
+                    <tr>
+                        <td colspan="7" class="empty-message">
+                            Loading trash...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="admin-footer">
+    © 2026 DriveEase. All Rights Reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+/* SIDEBAR FUNCTIONS */
+
+function toggleSidebar() {
+
+    document.getElementById("adminSidebar")
+        .classList.toggle("show");
+
+    document.getElementById("sidebarBackdrop")
+        .classList.toggle("show");
+}
+
+function closeSidebar() {
+
+    document.getElementById("adminSidebar")
+        .classList.remove("show");
+
+    document.getElementById("sidebarBackdrop")
+        .classList.remove("show");
+}
+
+/* PAYMENT MANAGEMENT */
+
+let allPayments = [];
+
+async function checkAdmin() {
+
+    try {
+
+        const response = await fetch("/api/auth/me", {
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const user = await response.json();
+
+        if (user.role !== "ADMIN") {
+            window.location.href = "login.html";
+            return;
+        }
+
+        loadPayments();
+
+    } catch (error) {
+
+        console.error("Authentication error:", error);
+        window.location.href = "login.html";
+    }
+}
+
+async function loadPayments() {
+
+    try {
+
+        const response = await fetch("/api/payments", {
+            credentials: "include"
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error("Unable to load payments.");
+        }
+
+        allPayments = await response.json();
+
+        updateStatistics();
+        filterPayments();
+
+    } catch (error) {
+
+        console.error(error);
+        showError(error.message);
+    }
+}
+
+function updateStatistics() {
+
+    const successful = allPayments.filter(
+        p => p.paymentStatus === "SUCCESS"
+    );
+
+    const pending = allPayments.filter(
+        p => p.paymentStatus === "PENDING"
+    );
+
+    const revenue = successful.reduce(
+        (sum, payment) => sum + Number(payment.amount || 0),
+        0
+    );
+
+    document.getElementById("totalPayments").textContent =
+        allPayments.length;
+
+    document.getElementById("successfulPayments").textContent =
+        successful.length;
+
+    document.getElementById("pendingPayments").textContent =
+        pending.length;
+
+    document.getElementById("totalRevenue").textContent =
+        "₹" + revenue.toLocaleString("en-IN");
+}
+
+function filterPayments() {
+
+    const searchValue = document
+        .getElementById("searchInput")
+        .value.toLowerCase()
+        .trim();
+
+    const statusValue =
+        document.getElementById("statusFilter").value;
+
+    const filtered = allPayments.filter(payment => {
+
+        const matchesSearch =
+            String(payment.id).includes(searchValue) ||
+            String(payment.bookingId).includes(searchValue);
+
+        const matchesStatus =
+            statusValue === "ALL" ||
+            payment.paymentStatus === statusValue;
+
+        return matchesSearch && matchesStatus;
+    });
+
+    displayPayments(filtered);
+}
+
+function displayPayments(payments) {
+
+    const table = document.getElementById("paymentTable");
+
+    document.getElementById("recordCount").textContent =
+        payments.length + " Payments";
+
+    if (payments.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="8" class="empty-message">
+                    No payments found.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    table.innerHTML = payments.map(payment => {
+
+        const status = payment.paymentStatus || "UNKNOWN";
+        const statusClass = getStatusClass(status);
+
+        const paymentDate = payment.paymentDate
+            ? new Date(payment.paymentDate).toLocaleString("en-IN")
+            : "N/A";
+
+        return `
+            <tr>
+                <td>#${escapeHTML(payment.id)}</td>
+                <td>#${escapeHTML(payment.bookingId)}</td>
+                <td>₹${Number(payment.amount || 0).toLocaleString("en-IN")}</td>
+                <td>${escapeHTML(payment.paymentMethod || "N/A")}</td>
+                <td>${escapeHTML(payment.transactionId || "N/A")}</td>
+
+                <td>
+                    <span class="status-badge ${statusClass}">
+                        ${escapeHTML(status)}
+                    </span>
+                </td>
+
+                <td>${escapeHTML(paymentDate)}</td>
+
+                <td>
+                    <button class="action-btn trash-btn"
+                        onclick="movePaymentToTrash(${Number(payment.id)})">
+                        Move to Trash
+                    </button>
+                </td>
+            </tr>
+        `;
+
+    }).join("");
+}
+
+function getStatusClass(status) {
+
+    if (status === "SUCCESS") return "status-success";
+    if (status === "FAILED") return "status-failed";
+    if (status === "REFUNDED") return "status-refunded";
+
+    return "status-pending";
+}
+
+/* MOVE PAYMENT TO TRASH */
+
+async function movePaymentToTrash(id) {
+
+    if (!confirm("Move payment #" + id + " to Trash?")) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(`/api/payments/${id}/trash`, {
+            method: "PATCH",
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+
+            throw new Error(
+                await getResponseError(
+                    response,
+                    "Unable to move payment to Trash."
+                )
+            );
+        }
+
+        showSuccess("Payment moved to Trash successfully.");
+
+        await loadPayments();
+
+        if (!document.getElementById("trashSection")
+            .classList.contains("d-none")) {
+
+            await loadTrash();
+        }
+
+    } catch (error) {
+
+        showError(error.message);
+    }
+}
+
+/* TRASH SECTION */
+
+function toggleTrash() {
+
+    const section = document.getElementById("trashSection");
+
+    section.classList.toggle("d-none");
+
+    if (!section.classList.contains("d-none")) {
+
+        loadTrash();
+
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+async function loadTrash() {
+
+    const table = document.getElementById("trashPaymentTable");
+    const errorBox = document.getElementById("trashError");
+
+    errorBox.classList.add("d-none");
+
+    try {
+
+        const response = await fetch("/api/payments/trash", {
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+
+            throw new Error(
+                await getResponseError(
+                    response,
+                    "Unable to load payment Trash."
+                )
+            );
+        }
+
+        const payments = await response.json();
+
+        if (!payments.length) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty-message">
+                        Trash is empty.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        table.innerHTML = payments.map(payment => `
+
+            <tr>
+                <td>#${escapeHTML(payment.id)}</td>
+                <td>#${escapeHTML(payment.bookingId)}</td>
+                <td>₹${Number(payment.amount || 0).toLocaleString("en-IN")}</td>
+                <td>${escapeHTML(payment.paymentMethod || "N/A")}</td>
+                <td>${escapeHTML(payment.transactionId || "N/A")}</td>
+
+                <td>
+                    <span class="status-badge ${getStatusClass(payment.paymentStatus)}">
+                        ${escapeHTML(payment.paymentStatus || "UNKNOWN")}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="d-flex gap-2">
+
+                        <button class="action-btn restore-btn"
+                            onclick="restorePayment(${Number(payment.id)})">
+                            Restore
+                        </button>
+
+                        <button class="action-btn delete-btn"
+                            onclick="permanentlyDeletePayment(${Number(payment.id)})">
+                            Delete Forever
+                        </button>
+
+                    </div>
+                </td>
+            </tr>
+
+        `).join("");
+
+    } catch (error) {
+
+        errorBox.textContent = error.message;
+        errorBox.classList.remove("d-none");
+    }
+}
+
+/* RESTORE PAYMENT */
+
+async function restorePayment(id) {
+
+    if (!confirm("Restore payment #" + id + "?")) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(`/api/payments/${id}/restore`, {
+            method: "PATCH",
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+
+            throw new Error(
+                await getResponseError(
+                    response,
+                    "Unable to restore payment."
+                )
+            );
+        }
+
+        showSuccess("Payment restored successfully.");
+
+        await loadPayments();
+        await loadTrash();
+
+    } catch (error) {
+
+        showError(error.message);
+    }
+}
+
+/* PERMANENT DELETE */
+
+async function permanentlyDeletePayment(id) {
+
+    const confirmed = confirm(
+        "Permanently delete payment #" + id +
+        "?\n\nThis action cannot be undone. " +
+        "Deleting a successful payment also removes its financial record."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(`/api/payments/${id}/permanent`, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+
+            throw new Error(
+                await getResponseError(
+                    response,
+                    "Unable to permanently delete payment."
+                )
+            );
+        }
+
+        showSuccess("Payment permanently deleted.");
+
+        await loadPayments();
+        await loadTrash();
+
+    } catch (error) {
+
+        showError(error.message);
+    }
+}
+
+/* COMMON FUNCTIONS */
+
+async function getResponseError(response, fallback) {
+
+    try {
+
+        const data = await response.json();
+
+        return data.error || data.message || fallback;
+
+    } catch {
+
+        return fallback;
+    }
+}
+
+function escapeHTML(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, character => {
+
+        const characters = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        };
+
+        return characters[character];
+    });
+}
+
+function showError(message) {
+
+    const box = document.getElementById("errorMessage");
+
+    box.textContent = message;
+    box.classList.remove("d-none");
+
+    document.getElementById("successMessage")
+        .classList.add("d-none");
+}
+
+function showSuccess(message) {
+
+    const box = document.getElementById("successMessage");
+
+    box.textContent = message;
+    box.classList.remove("d-none");
+
+    document.getElementById("errorMessage")
+        .classList.add("d-none");
+}
+
+/* LOGOUT */
+
+async function logout() {
+
+    try {
+
+        await fetch("/api/auth/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+
+    } catch (error) {
+
+        console.error("Logout error:", error);
+    }
+
+    window.location.href = "login.html";
+}
+
+/* PAGE INITIALIZATION */
+
+document.addEventListener("DOMContentLoaded", checkAdmin);
+
+</script>
+
+</body>
+</html>

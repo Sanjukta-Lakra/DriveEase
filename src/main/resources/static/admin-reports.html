@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEase | Reports & Analytics</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/admin-layout.css">
+
+    <style>
+        :root {
+            --primary: #14283f;
+            --secondary: #203d59;
+            --gold: #f5b942;
+            --light: #f5f7fa;
+            --text: #263445;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--light);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* PAGE BANNER */
+
+        .admin-page-banner {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
+            border-radius: 14px;
+            padding: 25px 30px;
+            margin-bottom: 28px;
+            color: var(--white);
+            box-shadow: 0 5px 16px rgba(20,40,63,.12);
+        }
+
+        .admin-page-banner h2 {
+            font-size: 27px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .admin-page-banner p {
+            font-size: 14px;
+            margin: 0;
+            color: #e2eaf2;
+        }
+
+        /* CONTENT SECTIONS */
+
+        .content-card {
+            background: var(--white);
+            border: none;
+            border-radius: 13px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .section-description {
+            color: #718096;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        /* STATISTICS CARDS */
+
+        .stat-card {
+            height: 100%;
+            min-width: 0;
+            background: var(--white);
+            border: 1px solid #edf0f4;
+            border-radius: 11px;
+            padding: 19px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.04);
+            transition: transform .2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-label {
+            color: #687789;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            color: var(--primary);
+            font-size: 27px;
+            font-weight: 800;
+            margin: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .stat-line {
+            width: 40px;
+            height: 4px;
+            border-radius: 5px;
+            background: var(--gold);
+            margin-top: 12px;
+        }
+
+        /* CHARTS */
+
+        .chart-card {
+            height: 100%;
+            background: var(--white);
+            border: none;
+            border-radius: 13px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+        }
+
+        /* TABLE */
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+
+        .report-table {
+            min-width: 450px;
+            margin-bottom: 0;
+        }
+
+        .report-table thead th {
+            background: var(--primary);
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 14px 12px;
+            white-space: nowrap;
+            border: none;
+        }
+
+        .report-table tbody td {
+            color: var(--text);
+            font-size: 13px;
+            padding: 13px 12px;
+            vertical-align: middle;
+        }
+
+        .report-table tbody tr:hover {
+            background: #f5f8fc;
+        }
+
+        /* INPUTS AND BUTTONS */
+
+        .form-control {
+            min-height: 42px;
+            border-radius: 7px;
+            font-size: 13px;
+            border-color: #dce2e9;
+        }
+
+        .form-control:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 .15rem rgba(245,185,66,.2);
+        }
+
+        .form-label {
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--primary);
+            border: none;
+            border-radius: 7px;
+            padding: 11px 18px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .btn-gold:hover {
+            background: #e5a92e;
+            color: var(--primary);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 991px) {
+            .chart-container {
+                height: 270px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .admin-page-banner {
+                min-height: 130px;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .admin-page-banner h2 {
+                font-size: 22px;
+            }
+
+            .admin-page-banner p {
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .content-card {
+                padding: 17px;
+                margin-bottom: 18px;
+                border-radius: 12px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .section-description {
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-label {
+                font-size: 11px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            .chart-card {
+                padding: 17px;
+            }
+
+            .btn-gold {
+                width: 100%;
+            }
+
+            .report-table thead th,
+            .report-table tbody td {
+                padding: 11px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- MOBILE HEADER -->
+
+<div class="mobile-admin-bar">
+
+    <a href="admin-dashboard.html" class="mobile-admin-brand">
+        DriveEase
+    </a>
+
+    <button class="sidebar-toggle"
+            type="button"
+            onclick="toggleSidebar()"
+            aria-label="Open navigation">
+        ☰
+    </button>
+
+</div>
+
+<div class="sidebar-backdrop"
+     id="sidebarBackdrop"
+     onclick="closeSidebar()">
+</div>
+
+<!-- ADMIN SIDEBAR -->
+
+<aside class="admin-sidebar" id="adminSidebar">
+
+    <a href="admin-dashboard.html" class="sidebar-brand">
+        DriveEase
+    </a>
+
+    <div class="sidebar-heading">
+        MAIN MENU
+    </div>
+
+    <nav class="sidebar-nav">
+
+        <a href="admin-dashboard.html" class="nav-link">
+            Dashboard
+        </a>
+
+        <a href="admin-vehicles.html" class="nav-link">
+            Manage Vehicles
+        </a>
+
+        <a href="admin-bookings.html" class="nav-link">
+            Manage Bookings
+        </a>
+
+        <a href="admin-users.html" class="nav-link">
+            Manage Users
+        </a>
+
+        <a href="admin-customers.html" class="nav-link">
+            Manage Customers
+        </a>
+
+        <a href="admin-reviews.html" class="nav-link">
+            Manage Reviews
+        </a>
+
+        <a href="admin-reports.html" class="nav-link active">
+            Reports &amp; Analytics
+        </a>
+
+        <a href="admin-payments.html" class="nav-link">
+            Payment Management
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-admin-label">
+            ADMIN PANEL
+        </div>
+
+        <button class="sidebar-logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+
+<main class="admin-content">
+
+    <section class="admin-page-banner">
+        <h2>Reports & Analytics</h2>
+        <p>Monitor bookings, revenue, customers and vehicle performance.</p>
+    </section>
+
+    <!-- OVERALL STATISTICS -->
+
+    <section class="content-card">
+
+        <h4 class="section-title">Overall Statistics</h4>
+
+        <p class="section-description">
+            Overview of DriveEase booking, revenue and customer activity.
+        </p>
+
+        <div class="row g-3">
+
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-label">Total Bookings</div>
+                    <h3 class="stat-value" id="totalBookings">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-label">Total Revenue</div>
+                    <h3 class="stat-value" id="totalRevenue">₹0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-label">Total Customers</div>
+                    <h3 class="stat-value" id="totalCustomers">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-label">Total Payments</div>
+                    <h3 class="stat-value" id="totalPayments">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BOOKING OVERVIEW -->
+
+    <section class="content-card">
+
+        <h4 class="section-title">Booking Overview</h4>
+
+        <p class="section-description">
+            Monitor the current status of all customer bookings.
+        </p>
+
+        <div class="row g-3">
+
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="stat-label">Pending</div>
+                    <h3 class="stat-value" id="pendingBookings">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="stat-label">Confirmed</div>
+                    <h3 class="stat-value" id="confirmedBookings">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="stat-label">Active</div>
+                    <h3 class="stat-value" id="activeBookings">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="stat-label">Completed</div>
+                    <h3 class="stat-value" id="completedBookings">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="stat-label">Cancelled</div>
+                    <h3 class="stat-value" id="cancelledBookings">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="stat-label">Rejected</div>
+                    <h3 class="stat-value" id="rejectedBookings">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PAYMENT OVERVIEW -->
+
+    <section class="content-card">
+
+        <h4 class="section-title">Payment Overview</h4>
+
+        <p class="section-description">
+            Monitor payment transactions and active users.
+        </p>
+
+        <div class="row g-3">
+
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-label">Successful</div>
+                    <h3 class="stat-value" id="successfulPayments">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-label">Pending</div>
+                    <h3 class="stat-value" id="pendingPayments">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-label">Failed</div>
+                    <h3 class="stat-value" id="failedPayments">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-label">Refunded</div>
+                    <h3 class="stat-value" id="refundedPayments">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg">
+                <div class="stat-card">
+                    <div class="stat-label">Active Users</div>
+                    <h3 class="stat-value" id="activeUsers">0</h3>
+                    <div class="stat-line"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BOOKING AND REVENUE CHARTS -->
+
+    <section class="row g-4 mb-4">
+
+        <div class="col-12 col-xl-6">
+            <div class="chart-card">
+
+                <h4 class="section-title">Monthly Booking Trends</h4>
+
+                <p class="section-description">
+                    Booking activity over the last 12 months.
+                </p>
+
+                <div class="chart-container">
+                    <canvas id="bookingChart"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-6">
+            <div class="chart-card">
+
+                <h4 class="section-title">Monthly Revenue Trends</h4>
+
+                <p class="section-description">
+                    Successful payment revenue over the last 12 months.
+                </p>
+
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- MOST RENTED VEHICLES -->
+
+    <section class="content-card">
+
+        <h4 class="section-title">Most-Rented Vehicles</h4>
+
+        <p class="section-description">
+            Vehicles ranked by confirmed, active and completed bookings.
+        </p>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover report-table">
+
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Vehicle</th>
+                        <th>Total Bookings</th>
+                    </tr>
+                </thead>
+
+                <tbody id="mostRentedVehiclesTable">
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">
+                            No vehicle data available.
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </section>
+
+    <!-- MONTHLY CUSTOMER REGISTRATIONS -->
+
+    <section class="content-card">
+
+        <h4 class="section-title">Monthly Customer Registrations</h4>
+
+        <p class="section-description">
+            Track new customer registrations over the last 12 months.
+        </p>
+
+        <div class="chart-container">
+            <canvas id="customerChart"></canvas>
+        </div>
+
+    </section>
+
+    <!-- CUSTOM DATE RANGE REPORT -->
+
+    <section class="content-card">
+
+        <h4 class="section-title">Custom Date-Range Report</h4>
+
+        <p class="section-description">
+            Generate booking, customer and payment reports for a selected period.
+        </p>
+
+        <div class="row g-3 align-items-end">
+
+            <div class="col-12 col-md-4">
+                <label for="startDate" class="form-label">
+                    Start Date
+                </label>
+
+                <input type="date"
+                       id="startDate"
+                       class="form-control">
+            </div>
+
+            <div class="col-12 col-md-4">
+                <label for="endDate" class="form-label">
+                    End Date
+                </label>
+
+                <input type="date"
+                       id="endDate"
+                       class="form-control">
+            </div>
+
+            <div class="col-12 col-md-4">
+                <button class="btn btn-gold w-100"
+                        onclick="loadDateRangeReport()">
+                    Generate Report
+                </button>
+            </div>
+
+        </div>
+
+        <div id="dateRangeMessage" class="mt-3"></div>
+
+        <div id="dateRangeResults"
+             class="mt-4"
+             style="display: none;">
+
+            <h4 class="section-title mb-3">
+                Report Results
+            </h4>
+
+            <div class="row g-3">
+
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Bookings</div>
+                        <h3 class="stat-value" id="rangeTotalBookings">0</h3>
+                        <div class="stat-line"></div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">New Customers</div>
+                        <h3 class="stat-value" id="rangeTotalCustomers">0</h3>
+                        <div class="stat-line"></div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Revenue</div>
+                        <h3 class="stat-value" id="rangeTotalRevenue">₹0</h3>
+                        <div class="stat-line"></div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Payments</div>
+                        <h3 class="stat-value" id="rangeTotalPayments">0</h3>
+                        <div class="stat-line"></div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Successful Payments</div>
+                        <h3 class="stat-value" id="rangeSuccessfulPayments">0</h3>
+                        <div class="stat-line"></div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Pending Payments</div>
+                        <h3 class="stat-value" id="rangePendingPayments">0</h3>
+                        <div class="stat-line"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer class="admin-footer">
+    © 2026 DriveEase. All Rights Reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    // SIDEBAR FUNCTIONS
+
+    function toggleSidebar() {
+
+        document.getElementById("adminSidebar")
+            .classList.toggle("show");
+
+        document.getElementById("sidebarBackdrop")
+            .classList.toggle("show");
+    }
+
+    function closeSidebar() {
+
+        document.getElementById("adminSidebar")
+            .classList.remove("show");
+
+        document.getElementById("sidebarBackdrop")
+            .classList.remove("show");
+    }
+
+    // ESCAPE HTML
+
+    function escapeHTML(value) {
+
+        return String(value ?? "").replace(/[&<>"']/g, function(character) {
+
+            const entities = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            };
+
+            return entities[character];
+        });
+    }
+
+    // CHECK ADMIN AUTHENTICATION
+
+    async function checkAdminAccess() {
+
+        try {
+
+            const response = await fetch("/api/auth/me", {
+                credentials: "same-origin"
+            });
+
+            if (!response.ok) {
+                window.location.href = "login.html";
+                return false;
+            }
+
+            const user = await response.json();
+
+            if (user.role !== "ADMIN") {
+                window.location.href = "login.html";
+                return false;
+            }
+
+            return true;
+
+        } catch (error) {
+
+            console.error("Authentication error:", error);
+            window.location.href = "login.html";
+            return false;
+        }
+    }
+
+    // LOAD OVERALL REPORT SUMMARY
+
+    async function loadReportSummary() {
+
+        try {
+
+            const response = await fetch("/api/admin/reports/summary", {
+                credentials: "same-origin"
+            });
+
+            if (!response.ok) {
+                throw new Error("Unable to load report summary.");
+            }
+
+            const data = await response.json();
+
+            document.getElementById("totalBookings").textContent =
+                data.totalBookings ?? 0;
+
+            document.getElementById("totalRevenue").textContent =
+                "₹" + Number(data.totalRevenue ?? 0).toLocaleString("en-IN");
+
+            document.getElementById("totalCustomers").textContent =
+                data.totalCustomers ?? 0;
+
+            document.getElementById("totalPayments").textContent =
+                data.totalPayments ?? 0;
+
+            document.getElementById("pendingBookings").textContent =
+                data.pendingBookings ?? 0;
+
+            document.getElementById("confirmedBookings").textContent =
+                data.confirmedBookings ?? 0;
+
+            document.getElementById("activeBookings").textContent =
+                data.activeBookings ?? 0;
+
+            document.getElementById("completedBookings").textContent =
+                data.completedBookings ?? 0;
+
+            document.getElementById("cancelledBookings").textContent =
+                data.cancelledBookings ?? 0;
+
+            document.getElementById("rejectedBookings").textContent =
+                data.rejectedBookings ?? 0;
+
+            document.getElementById("successfulPayments").textContent =
+                data.successfulPayments ?? 0;
+
+            document.getElementById("pendingPayments").textContent =
+                data.pendingPayments ?? 0;
+
+            document.getElementById("failedPayments").textContent =
+                data.failedPayments ?? 0;
+
+            document.getElementById("refundedPayments").textContent =
+                data.refundedPayments ?? 0;
+
+            document.getElementById("activeUsers").textContent =
+                data.activeUsers ?? 0;
+
+        } catch (error) {
+
+            console.error("Summary error:", error);
+            alert("Unable to load report summary.");
+
+        }
+    }
+
+    // INITIALIZE REPORTS PAGE
+
+    document.addEventListener("DOMContentLoaded", async function () {
+
+        const hasAccess = await checkAdminAccess();
+
+        if (hasAccess) {
+
+            await loadReportSummary();
+            await loadMonthlyBookingReport();
+            await loadMonthlyRevenueReport();
+            await loadMostRentedVehicles();
+            await loadMonthlyCustomerReport();
+
+        }
+    });
+
+    // LOAD MONTHLY BOOKING TRENDS
+
+    async function loadMonthlyBookingReport() {
+
+        try {
+
+            const response = await fetch(
+                "/api/admin/reports/monthly-bookings",
+                {
+                    credentials: "same-origin"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to load monthly bookings.");
+            }
+
+            const data = await response.json();
+
+            const labels = data.map(item => item.month);
+
+            const bookingCounts = data.map(
+                item => item.totalBookings
+            );
+
+            new Chart(document.getElementById("bookingChart"), {
+
+                type: "bar",
+
+                data: {
+                    labels: labels,
+
+                    datasets: [{
+                        label: "Total Bookings",
+                        data: bookingCounts,
+                        backgroundColor: "#f5b942",
+                        borderRadius: 6,
+                        maxBarThickness: 45
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+        } catch (error) {
+
+            console.error("Monthly booking report error:", error);
+
+        }
+    }
+
+    // LOAD MONTHLY REVENUE TRENDS
+
+    async function loadMonthlyRevenueReport() {
+
+        try {
+
+            const response = await fetch(
+                "/api/admin/reports/monthly-revenue",
+                {
+                    credentials: "same-origin"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to load monthly revenue.");
+            }
+
+            const data = await response.json();
+
+            const labels = data.map(item => item.month);
+
+            const revenueAmounts = data.map(
+                item => Number(item.totalRevenue)
+            );
+
+            new Chart(document.getElementById("revenueChart"), {
+
+                type: "line",
+
+                data: {
+                    labels: labels,
+
+                    datasets: [{
+                        label: "Monthly Revenue (₹)",
+                        data: revenueAmounts,
+                        borderColor: "#14283f",
+                        backgroundColor: "rgba(20, 40, 63, 0.12)",
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 5,
+                        pointBackgroundColor: "#f5b942"
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return "Revenue: ₹" +
+                                        context.parsed.y.toLocaleString("en-IN");
+                                }
+                            }
+                        }
+                    },
+
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+
+                            ticks: {
+                                callback: function(value) {
+                                    return "₹" +
+                                        value.toLocaleString("en-IN");
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        } catch (error) {
+
+            console.error("Monthly revenue report error:", error);
+
+        }
+    }
+
+    // LOAD MOST-RENTED VEHICLES
+
+    async function loadMostRentedVehicles() {
+
+        try {
+
+            const response = await fetch(
+                "/api/admin/reports/most-rented-vehicles",
+                {
+                    credentials: "same-origin"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to load most-rented vehicles.");
+            }
+
+            const vehicles = await response.json();
+
+            const table = document.getElementById(
+                "mostRentedVehiclesTable"
+            );
+
+            if (!Array.isArray(vehicles) || vehicles.length === 0) {
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">
+                            No vehicle booking data available.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+            table.innerHTML = vehicles.map((vehicle, index) => `
+
+                <tr>
+                    <td>
+                        <strong>${index + 1}</strong>
+                    </td>
+
+                    <td>
+                        ${escapeHTML(vehicle.brand)} ${escapeHTML(vehicle.model)}
+                    </td>
+
+                    <td>
+                        <strong>${escapeHTML(vehicle.totalBookings)}</strong>
+                    </td>
+                </tr>
+
+            `).join("");
+
+        } catch (error) {
+
+            console.error("Most-rented vehicles error:", error);
+
+        }
+    }
+
+    // LOAD MONTHLY CUSTOMER REGISTRATIONS
+
+    async function loadMonthlyCustomerReport() {
+
+        try {
+
+            const response = await fetch(
+                "/api/admin/reports/monthly-customers",
+                {
+                    credentials: "same-origin"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to load monthly customer report.");
+            }
+
+            const data = await response.json();
+
+            const labels = data.map(item => item.month);
+
+            const customerCounts = data.map(
+                item => item.totalCustomers
+            );
+
+            new Chart(document.getElementById("customerChart"), {
+
+                type: "bar",
+
+                data: {
+                    labels: labels,
+
+                    datasets: [{
+                        label: "New Customers",
+                        data: customerCounts,
+                        backgroundColor: "#245744",
+                        borderRadius: 6,
+                        maxBarThickness: 45
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+        } catch (error) {
+
+            console.error("Monthly customer report error:", error);
+
+        }
+    }
+
+    // GENERATE CUSTOM DATE-RANGE REPORT
+
+    async function loadDateRangeReport() {
+
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+
+        const message = document.getElementById("dateRangeMessage");
+        const results = document.getElementById("dateRangeResults");
+
+        if (!startDate || !endDate) {
+
+            message.innerHTML = `
+                <div class="alert alert-warning">
+                    Please select both start date and end date.
+                </div>
+            `;
+
+            results.style.display = "none";
+            return;
+        }
+
+        if (endDate < startDate) {
+
+            message.innerHTML = `
+                <div class="alert alert-warning">
+                    End date cannot be earlier than start date.
+                </div>
+            `;
+
+            results.style.display = "none";
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `/api/admin/reports/date-range?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`,
+                {
+                    credentials: "same-origin"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to generate date-range report.");
+            }
+
+            const data = await response.json();
+
+            document.getElementById("rangeTotalBookings").textContent =
+                data.totalBookings ?? 0;
+
+            document.getElementById("rangeTotalCustomers").textContent =
+                data.totalCustomers ?? 0;
+
+            document.getElementById("rangeTotalRevenue").textContent =
+                "₹" + Number(data.totalRevenue ?? 0).toLocaleString("en-IN");
+
+            document.getElementById("rangeTotalPayments").textContent =
+                data.totalPayments ?? 0;
+
+            document.getElementById("rangeSuccessfulPayments").textContent =
+                data.successfulPayments ?? 0;
+
+            document.getElementById("rangePendingPayments").textContent =
+                data.pendingPayments ?? 0;
+
+            results.style.display = "block";
+
+            message.innerHTML = `
+                <div class="alert alert-success">
+                    Report generated successfully!
+                </div>
+            `;
+
+        } catch (error) {
+
+            console.error("Date-range report error:", error);
+
+            results.style.display = "none";
+
+            message.innerHTML = `
+                <div class="alert alert-danger">
+                    Unable to generate report. Please try again.
+                </div>
+            `;
+        }
+    }
+
+    // ADMIN LOGOUT
+
+    async function logout() {
+
+        try {
+
+            await fetch("/api/auth/logout", {
+                method: "POST",
+                credentials: "same-origin"
+            });
+
+        } catch (error) {
+
+            console.error("Logout error:", error);
+
+        } finally {
+
+            window.location.href = "login.html";
+        }
+    }
+
+</script>
+
+</body>
+</html>
